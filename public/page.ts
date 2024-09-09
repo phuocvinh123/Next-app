@@ -1,0 +1,43 @@
+import Logo from './assets/images/LOGO.png'
+import Image15 from './assets/images/image-15.png'
+import Bitmap from './assets/images/Bitmap.png'
+import StripeLogo from './assets/images/Stripe-Logo.png'
+import PayPalLogo from './assets/images/PayPal-Logo.png'
+import Rectangle223 from './assets/images/Rectangle-223.png'
+import Image16 from './assets/images/image-16.png'
+import ApplePay from './assets/images/apple-pay.png'
+import Rectangle224 from './assets/images/Rectangle-224.png'
+import Image17 from './assets/images/image-17.png'
+import Image18 from './assets/images/image-18.png'
+import Image19 from './assets/images/image-19.png'
+import Image20 from './assets/images/image-20.png'
+import Image22 from './assets/images/image-22.png'
+import Rectangle225 from './assets/images/Rectangle-225.png'
+import Rectangle226 from './assets/images/Rectangle-226.png'
+import Rectangle227 from './assets/images/Rectangle-227.png'
+import Rectangle228 from './assets/images/Rectangle-228.png'
+import Rectangle236 from './assets/images/Rectangle-236.png'
+import Rectangle233 from './assets/images/Rectangle-233.png'
+
+export {
+  Logo,
+  Image15,
+  Bitmap,
+  StripeLogo,
+  PayPalLogo,
+  Rectangle223,
+  Image16,
+  ApplePay,
+  Rectangle224,
+  Image17,
+  Image18,
+  Image19,
+  Image20,
+  Image22,
+  Rectangle225,
+  Rectangle226,
+  Rectangle227,
+  Rectangle228,
+  Rectangle236,
+  Rectangle233,
+}
