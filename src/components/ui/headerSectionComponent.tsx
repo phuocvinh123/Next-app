@@ -4,7 +4,7 @@ import { Logo } from '../../../public/page'
 export const Header = () => {
   return (
     <>
-      <div className='bg-custom-gradient absolute h-[1188px] w-[1920px] top-0'></div>
+      <div className='bg-custom-gradient absolute h-[1188px] w-[1920px]  top-0 '></div>
       <div className='absolute top-0 right-0'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -22,10 +22,10 @@ export const Header = () => {
       </div>
       <div className='container mx-auto mt-10 flex justify-between relative'>
         <div className='flex'>
-          <div>
+          <div className='w-[170px] h-[34px]'>
             <Image src={Logo} alt='images' width={169} height={34} />
           </div>
-          <div className='flex justify-center items-center text-center gap-10 ml-24'>
+          <div className='md:flex justify-center items-center text-center gap-10 ml-24 hidden'>
             <div>Sell</div>
             <div>Marketplace</div>
             <div>Community</div>
@@ -33,7 +33,7 @@ export const Header = () => {
             <div>Resources</div>
           </div>
         </div>
-        <div className='flex items-center gap-4'>
+        <div className='lg:flex items-center gap-4 hidden'>
           <div>Login</div>
           <div className='rounded-[5px] text-white bg-[#7854F7] p-2'>
             Get Started

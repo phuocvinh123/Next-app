@@ -18,6 +18,20 @@ import Rectangle227 from './assets/images/Rectangle-227.png'
 import Rectangle228 from './assets/images/Rectangle-228.png'
 import Rectangle236 from './assets/images/Rectangle-236.png'
 import Rectangle233 from './assets/images/Rectangle-233.png'
+import Ellipse5 from './assets/images/Ellipse5.png'
+import Ellipse6 from './assets/images/Ellipse6.png'
+import Ellipse9 from './assets/images/Ellipse9.png'
+import Ellipse10 from './assets/images/Ellipse10.png'
+import Ellipse11 from './assets/images/Ellipse11.png'
+import Ellipse14 from './assets/images/Ellipse14.png'
+import Ellipse15 from './assets/images/Ellipse15.png'
+import Ellipse26 from './assets/images/Ellipse26.png'
+import Ellipse27 from './assets/images/Ellipse27.png'
+import Ellipse28 from './assets/images/Ellipse28.png'
+import Ellipse29 from './assets/images/Ellipse29.png'
+import Ellipse30 from './assets/images/Ellipse30.png'
+import Image24 from './assets/images/image24.png'
+import Image25 from './assets/images/image25.png'
 
 export {
   Logo,
@@ -40,4 +54,18 @@ export {
   Rectangle228,
   Rectangle236,
   Rectangle233,
+  Ellipse5,
+  Ellipse6,
+  Ellipse9,
+  Ellipse10,
+  Ellipse11,
+  Ellipse14,
+  Ellipse15,
+  Ellipse26,
+  Ellipse27,
+  Ellipse28,
+  Ellipse29,
+  Ellipse30,
+  Image24,
+  Image25,
 }

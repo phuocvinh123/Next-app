@@ -1,7 +1,11 @@
-import { FeaturesSection } from './features-section/page'
-import { Header } from './header-section/page'
-import { HeroSection } from './hero-section/page'
-import { Section } from './section/page'
+import { CtaSection } from '@/components/ui/ctaSectionComponent'
+import { FeaturesSection } from '@/components/ui/featuresSectionComponent'
+import { FooterSection } from '@/components/ui/footerSectionComponent'
+import { Header } from '@/components/ui/headerSectionComponent'
+import { HeroSection } from '@/components/ui/heroSectionComponent'
+import { PeopleSection } from '@/components/ui/peopleSectionComponent'
+import { Section } from '@/components/ui/sectionComponent'
+import { TestimonialSection } from '@/components/ui/testimonialsSectionComponent'
 
 export default function Home() {
   return (
@@ -10,6 +14,10 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
       <Section />
+      <TestimonialSection />
+      <PeopleSection />
+      <CtaSection />
+      <FooterSection />
     </div>
   )
 }
