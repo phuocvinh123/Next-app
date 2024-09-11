@@ -4,12 +4,12 @@ import { Image24 } from '../../../public/page'
 export const PeopleSection = () => {
   const svgs = new Array(30).fill(0)
   return (
-    <div className='container mx-auto h-[472px] relative'>
+    <div className='max-w-[1920px] h-[472px] mt-6 relative overflow-hidden'>
       <div className='flex flex-col justify-center items-center'>
-        <div className='text-center text-[55px] font-bold leading-[70px]'>
+        <div className='text-center text-[55px] font-bold leading-[70px] text-[#272D4E]'>
           Supported by real people
         </div>
-        <div className='text-center w-[660px] text-[#94A2B3] text-lg font-normal mt-5'>
+        <div className='text-center w-[660px] text-[#94A2B3] text-lg font-normal mt-[31px]'>
           Our team of Happiness Engineers works remotely from 58 countries
           providing customer support across multiple time zones.
         </div>
@@ -120,7 +120,7 @@ export const PeopleSection = () => {
             </defs>
           </svg>
         </div>
-        <div className='absolute w-[300px] flex flex-wrap gap-10 -bottom-36 -left-24 z-0'>
+        <div className='absolute w-[300px] flex flex-wrap gap-10 -bottom-32 left-12 z-0'>
           {svgs.map((_, index) => (
             <svg
               key={index}
@@ -134,7 +134,7 @@ export const PeopleSection = () => {
             </svg>
           ))}
         </div>
-        <div className='absolute w-[300px] flex flex-wrap gap-10 -bottom-8 -right-14 z-0'>
+        <div className='absolute w-[300px] flex flex-wrap gap-10 -bottom-8 right-12 z-0'>
           {svgs.map((_, index) => (
             <svg
               key={index}

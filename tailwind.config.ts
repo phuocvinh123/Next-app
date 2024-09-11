@@ -8,10 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
+      colors: () => ({
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-      },
+        inherit: 'inherit',
+        current: 'currentColor',
+        transparent: 'transparent',
+        black: '#000',
+        white: '#fff',
+        green: '#70C217',
+        purple: '#7854F7',
+      }),
       backgroundImage: {
         'custom-gradient':
           'linear-gradient(180deg, #E5EFFF 0%, rgba(229, 239, 255, 0.26) 83.7%, rgba(229, 239, 255, 0.00) 100%)',

@@ -4,8 +4,8 @@ import { Rectangle233, Rectangle236 } from '../../../public/page'
 export const Section = () => {
   const svgs = new Array(50).fill(0)
   return (
-    <div className='mt-28 relative'>
-      <div className='absolute top-10 w-[1921px] h-[1111px]'>
+    <div className='mt-28 relative overflow-hidden'>
+      <div className='absolute top-10 w-[1920px] h-[1110px]'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='1920'
@@ -20,22 +20,16 @@ export const Section = () => {
         </svg>
       </div>
       <div className='absolute -top-72 right-[500px]'>
-        <div className='text-[540px] text-[#FFFFFF] font-mono opacity-10 '>
-          w
-        </div>
+        <div className='text-[520px] text-[#FFFFFF] opacity-10 '>w</div>
       </div>
-      <div className='absolute -top-72 right-[200px]'>
-        <div className='text-[540px] text-[#FFFFFF] font-mono opacity-10 '>
-          O
-        </div>
+      <div className='absolute -top-72 right-[170px]'>
+        <div className='text-[520px] text-[#FFFFFF]  opacity-10 '>O</div>
       </div>
-      <div className='absolute -top-72 -right-[100px]'>
-        <div className='text-[540px] text-[#FFFFFF] font-mono opacity-10 '>
-          O
-        </div>
+      <div className='absolute -top-72 -right-[150px]'>
+        <div className='text-[520px] text-[#FFFFFF]  opacity-10 '>O</div>
       </div>
-      <div className='container mx-auto relative w-[1921px] h-[1220px]'>
-        <div className='flex gap-7'>
+      <div className='relative max-w-[1920px] h-[1190px]'>
+        <div className='flex gap-[70px] ml-[345px] relative'>
           <div className='w-[430px] h-[548] relative z-20'>
             <Image src={Rectangle236} alt='images' width={430} height={548} />
           </div>
@@ -56,7 +50,7 @@ export const Section = () => {
               />
             </svg>
           </div>
-          <div className='absolute top-36 -left-10 z-0'>
+          <div className='absolute top-36 -left-20 z-0'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='401'
@@ -73,7 +67,7 @@ export const Section = () => {
               />
             </svg>
           </div>
-          <div className='absolute w-[250px] flex flex-wrap gap-10 bottom-96 -left-6 z-0'>
+          <div className='absolute w-[250px] flex flex-wrap gap-10 -bottom-64 -left-8 z-0'>
             {svgs.map((_, index) => (
               <svg
                 key={index}
@@ -88,45 +82,64 @@ export const Section = () => {
             ))}
           </div>
           <div className='mt-28'>
-            <div className='w-[435px] text-4xl font-bold text-[#FFFFFF]'>
+            <div className='w-[435px] text-4xl leading-normal font-bold text-[#FFF]'>
               Develop
               <br /> Without Limits
             </div>
-            <div className='w-[480px] text-lg font-normal text-[#FFF] mt-2'>
+            <div className='w-[480px] text-lg font-normal text-[#FFF] mt-[13px] leading-[30px]'>
               WooCommerce is developer friendly, too. Built with a REST API,
               WooCommerce is scalable and can integrate with virtually any
               service. Design a complex store from scratch, extend a store for a
               client, or simply add a single product to a WordPress site—your
               store, your way.
             </div>
-            <div className='rounded-3xl text-center mt-8 bg-[#70C217] text-[#fff] w-[256px] p-2'>
+            <button className='rounded-[60px] text-center mt-[39px] bg-[#70C217] text-[#fff] w-[256px] px-[26px] py-[22px]'>
               Read the Documentation
-            </div>
+            </button>
           </div>
         </div>
-        <div className='flex justify-end mr-14 gap-7 mt-5'>
-          <div className='mt-14'>
-            <div className='w-[435px] text-4xl font-bold text-[#FFFFFF]'>
+        <div className='flex ml-[595px] gap-[70px] mt-32 relative'>
+          <div className='mt-6'>
+            <div className='w-[435px] text-4xl font-bold leading-normal text-[#FFF]'>
               Know our <br />
               Global Community
             </div>
-            <div className='w-[480px] text-lg font-normal text-[#FFF] mt-2'>
+            <div className='w-[480px] text-lg font-normal text-[#FFF] mt-[13px] leading-[30px]'>
               WooCommerce is one of the fastest-growing eCommerce communities.
               We’re proud that the helpfulness of the community and a wealth of
               online resources are frequently cited as reasons our users love
               it. There are 80+ meetups worldwide!
             </div>
-            <div className='rounded-3xl text-center mt-8 bg-[#70C217] text-[#fff] w-[256px] p-2'>
+            <button className='rounded-[60px] text-center mt-[39px] bg-[#70C217] text-[#fff] w-[256px] px-[26px] py-[22px]'>
               Read the Documentation
-            </div>
+            </button>
           </div>
-          <div className='w-[430px] h-[548] relative z-10'>
-            <Image src={Rectangle233} alt='images' width={430} height={548} />
-            <div className='absolute left-32 -top-2'>
+          <div className='relative'>
+            <div className='w-[430px] h-[548] relative z-10'>
+              <Image src={Rectangle233} alt='images' width={430} height={548} />
+              <div className='absolute left-32 -top-2'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='65'
+                  height='65'
+                  viewBox='0 0 65 65'
+                  fill='none'
+                >
+                  <circle
+                    cx='32.5'
+                    cy='32.5'
+                    r='30'
+                    stroke='#FFBA49'
+                    stroke-width='5'
+                  />
+                </svg>
+              </div>
+            </div>
+            <div className='absolute -right-28 top-0'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
-                width='65'
-                height='65'
+                width='262'
+                height='262'
                 viewBox='0 0 65 65'
                 fill='none'
               >
@@ -135,41 +148,29 @@ export const Section = () => {
                   cy='32.5'
                   r='30'
                   stroke='#FFBA49'
-                  stroke-width='5'
+                  stroke-width='1'
                 />
               </svg>
             </div>
-          </div>
-          <div className='absolute -right-10'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='262'
-              height='262'
-              viewBox='0 0 65 65'
-              fill='none'
-            >
-              <circle
-                cx='32.5'
-                cy='32.5'
-                r='30'
-                stroke='#FFBA49'
-                stroke-width='1'
-              />
-            </svg>
-          </div>
-          <div className='absolute w-[450px] flex flex-wrap gap-10 bottom-64 -right-24'>
-            {svgs.map((_, index) => (
-              <svg
-                key={index}
-                xmlns='http://www.w3.org/2000/svg'
-                width='9'
-                height='9'
-                viewBox='0 0 9 9'
-                fill='none'
-              >
-                <circle cx='4.45271' cy='4.44447' r='4.12556' fill='#70C217' />
-              </svg>
-            ))}
+            <div className='absolute w-[450px] flex flex-wrap gap-10 bottom-28 -right-40'>
+              {svgs.map((_, index) => (
+                <svg
+                  key={index}
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='9'
+                  height='9'
+                  viewBox='0 0 9 9'
+                  fill='none'
+                >
+                  <circle
+                    cx='4.45271'
+                    cy='4.44447'
+                    r='4.12556'
+                    fill='#70C217'
+                  />
+                </svg>
+              ))}
+            </div>
           </div>
         </div>
       </div>

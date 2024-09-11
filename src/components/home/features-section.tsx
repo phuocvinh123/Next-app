@@ -17,12 +17,12 @@ import {
 
 export const FeaturesSection = () => {
   return (
-    <div className='relative mt-72 container mx-auto '>
-      <div className='font-bold text-[55px] w-[457px] mx-auto text-center'>
+    <div className='relative mt-10 max-w-[1920px]'>
+      <div className='font-bold text-[55px] w-[457px] mx-auto text-center text-[#272D4E] leading-[70px] '>
         Your eCommerce made simple
       </div>
-      <div className='mt-10 flex justify-between '>
-        <div className='flex flex-col items-start justify-center '>
+      <div className='mt-[68px] flex justify-between '>
+        <div className='flex flex-col items-start justify-center ml-[232px]'>
           <div className='w-[430px] h-[293px] flex items-start relative'>
             <Image src={Rectangle223} alt='images' />
             <div className='absolute -left-32 -bottom-20'>
@@ -32,18 +32,18 @@ export const FeaturesSection = () => {
               <Image src={ApplePay} alt='images' width={68} height={48} />
             </div>
           </div>
-          <div className='mt-10 ml-6 text-[32px] font-bold leading-10 w-[430px]'>
+          <div className='mt-10 ml-6 text-[36px] font-bold leading-[70px] w-[430px] text-[#272D4E]'>
             All You Need to Start
           </div>
           <div className='w-[430px] ml-6 mt-2 text-[#94A2B3] text-lg font-normal'>
             Add WooCommerce plugin to any WordPress site and set up a new store
             in minutes.
           </div>
-          <div className='mt-4 ml-6 text-[#299EF3] text-xl font-bold leading-6 w-[430px]'>
+          <div className='mt-4 ml-6 text-[#299EF3] text-xl font-bold leading-6 w-[430px] cursor-pointer'>
             Ecommerce for Wordpress ›
           </div>
         </div>
-        <div className='mt-8 '>
+        <div className='mt-[87px] '>
           <div className='w-[430px] h-[293px] relative'>
             <Image src={Rectangle224} alt='images' width={430} height={294} />
             <div className='absolute -top-2 left-14'>
@@ -62,18 +62,18 @@ export const FeaturesSection = () => {
               <Image src={Image22} alt='images' width={105} height={69} />
             </div>
           </div>
-          <div className='mt-4 ml-6 text-[32px] font-bold leading-10 w-[430px]'>
+          <div className='mt-4 ml-6 text-[36px] font-bold leading-[70px] w-[430px] text-[#272D4E]'>
             Customize and Extend
           </div>
           <div className='w-[430px] ml-6 mt-2 text-[#94A2B3] text-lg font-normal'>
             From subscriptions to gym classes to luxury cars, WooCommerce is
             fully customizable.
           </div>
-          <div className='mt-4 ml-6 text-[#299EF3] text-xl font-bold leading-6 w-[430px]'>
+          <div className='mt-4 ml-6 text-[#299EF3] text-xl font-bold leading-6 w-[430px] cursor-pointer'>
             Browse Extensions ›
           </div>
         </div>
-        <div className='mt-12 '>
+        <div className='mt-[115px] mr-[235px]'>
           <div className='w-[431px] h-[294px] relative'>
             <Image src={Rectangle225} alt='images' width={430} height={293} />
             <div className='absolute -top-4 left-10'>
@@ -86,13 +86,13 @@ export const FeaturesSection = () => {
               <Image src={Rectangle226} alt='images' width={170} height={116} />
             </div>
           </div>
-          <div className='mt-4 ml-6 text-[32px] font-bold leading-10 w-[430px]'>
+          <div className='mt-4 ml-6 text-[32px] font-bold leading-[70px] text-[#272D4E] w-[430px]'>
             Active Community
           </div>
           <div className='w-[430px] ml-6 mt-2 text-[#94A2B3] text-lg font-normal'>
             WooCommerce is one of the fastest-growing eCommerce communities.
           </div>
-          <div className='mt-4 ml-6 text-[#299EF3] text-xl font-bold leading-6 w-[430px]'>
+          <div className='mt-4 ml-6 text-[#299EF3] text-xl font-bold leading-6 w-[430px] cursor-pointer'>
             Check our Forums ›
           </div>
         </div>

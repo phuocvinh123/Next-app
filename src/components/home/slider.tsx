@@ -13,7 +13,7 @@ export default function SimpleSlider() {
     initialSlide: 1,
   }
   return (
-    <div className='w-[728px] h-[391px]'>
+    <div className='w-[728px] h-[391px] cursor-pointer overflow-hidden'>
       <Slider {...settings}>
         <div>
           <div className='w-[730px] h-[391px] rounded-[20px] bg-[#FFF]  flex items-center justify-center relative '>
