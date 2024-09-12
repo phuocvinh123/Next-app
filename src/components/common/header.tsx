@@ -3,12 +3,12 @@ import { Logo } from '../../../public/page'
 
 export const Header = () => {
   return (
-    <div className='max-w-[1920px] px-14 mt-10 flex justify-between relative z-10 '>
-      <div className='flex'>
-        <div className='flex justify-center items-center'>
+    <div className='3xl:max-w-[1920px] container mx-auto 3xl:px-14 mt-10 flex justify-between relative z-10 '>
+      <div className='flex items-center '>
+        <div className='flex justify-center items-center w-[170px]'>
           <Image src={Logo} alt='images' width={169} height={34} />
         </div>
-        <div className='md:flex justify-center items-center text-center gap-[38px] ml-36 hidden font-medium text-lg leading-normal text-[#272D4E] not-italic cursor-pointer'>
+        <div className='lg:flex justify-center items-center text-center gap-[38px] ml-36 hidden font-medium text-lg leading-normal text-[#272D4E] not-italic cursor-pointer'>
           <div>Sell</div>
           <div>Marketplace</div>
           <div>Community</div>
@@ -16,7 +16,7 @@ export const Header = () => {
           <div>Resources</div>
         </div>
       </div>
-      <div className='lg:flex items-center gap-[38px] hidden font-medium text-lg'>
+      <div className='xl:flex items-center gap-[38px] hidden font-medium text-lg '>
         <div className='text-[#272D4E] cursor-pointer'>Log In</div>
         <div className='rounded-[5px] text-white bg-purple px-[14px] py-[13px] cursor-pointer'>
           Get Started
@@ -35,6 +35,23 @@ export const Header = () => {
             />
           </svg>
         </div>
+      </div>
+      <div className='lg:hidden'>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='169px'
+          height='34px'
+          viewBox='0 0 24 24'
+          fill='none'
+        >
+          <path
+            d='M4 6H20M4 12H20M4 18H20'
+            stroke='#000000'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+          />
+        </svg>
       </div>
     </div>
   )

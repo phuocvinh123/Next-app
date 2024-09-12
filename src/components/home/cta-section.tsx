@@ -1,26 +1,21 @@
 export const CtaSection = () => {
   return (
-    <div className='w-[1920px] h-[261px] bg-[#5F37EF] relative z-20 -mt-9 flex justify-center items-center '>
-      <div className='flex gap-[61px] items-center justify-center text-[#FFF]'>
-        <div className='w-[855px] h-[105px] ml-[160px]'>
-          <span className="text-white text-4xl font-normal font-['Roboto'] leading-[52.50px]">
+    <div className='max-w-[1920px] py-[78px] bg-[#5F37EF] relative z-20  flex justify-center items-center '>
+      <div className='flex md:flex-row flex-col gap-[61px] items-center justify-center text-[#FFF] 3xl:max-w-[1129px] container mx-auto'>
+        <div className='w-[855px] h-[105px]  text-white xl:text-4xl text-2xl md:text-left text-center'>
+          <span className='font-normal leading-[52.50px]'>
             WooCommerce - the{' '}
           </span>
-          <span className="text-white text-4xl font-bold font-['Roboto'] leading-[52.50px]">
+          <span className=' font-bold leading-[52.50px]'>
             most customizable eCommerce platform
           </span>
-          <span className="text-white text-4xl font-normal font-['Roboto'] leading-[52.50px]">
-            {' '}
-            for building{' '}
-          </span>
-          <span className="text-white text-4xl font-bold font-['Roboto'] leading-[52.50px]">
+          <span className=' font-normal leading-[52.50px]'> for building </span>
+          <span className=' font-bold leading-[52.50px]'>
             your online business
           </span>
-          <span className="text-white text-4xl font-normal font-['Roboto'] leading-[52.50px]">
-            .
-          </span>
+          <span className=' font-normal leading-[52.50px]'>.</span>
         </div>
-        <button className='rounded-[60px] h-[72px] w-[207px] border-[#FFF] border-2 flex items-center justify-center text-lg font-bold leading-normal'>
+        <button className='rounded-[60px] h-[72px] w-[207px] border-[#FFF] border-2 flex items-center justify-center text-lg  font-bold leading-normal'>
           GET STARTED
         </button>
       </div>

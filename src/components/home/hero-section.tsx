@@ -4,9 +4,9 @@ import { Bitmap, Image15, PayPalLogo, StripeLogo } from '../../../public/page'
 export const HeroSection = () => {
   const svgs = new Array(50).fill(0)
   return (
-    <>
-      <div className='bg-custom-gradient absolute flex-shrink-0 h-[1188px] w-[1920px] top-0 '></div>
-      <div className='absolute top-0 right-36'>
+    <div className='overflow-hidden'>
+      <div className='bg-custom-gradient absolute flex-shrink-0 h-[1188px] 3xl:max-w-[1920px] w-full top-0 '></div>
+      <div className='absolute top-0 right-0'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='963'
@@ -21,9 +21,9 @@ export const HeroSection = () => {
           />
         </svg>
       </div>
-      <div className='flex pl-[220px] gap-4'>
-        <div className='mt-[185px] relative'>
-          <div className='w-[818px] text-[#272d4e] 2xl:text-[85px] font-bold leading-[95px]'>
+      <div className='flex xl:flex-row flex-col items-center 3xl:pl-[220px] container mx-auto gap-4'>
+        <div className='3xl:mt-[185px] mt-10 relative'>
+          <div className='max-w-[818px] text-[#272d4e] 3xl:text-[85px] text-[50px]  font-bold leading-[95px]'>
             Building exactly the eCommerce website you want.
           </div>
           <div className='text-[18px]  text-[#94A2B3] font-light mt-[29px] leading-[25px]'>
@@ -32,7 +32,7 @@ export const HeroSection = () => {
             <br /> Get started quickly and make your way.
           </div>
           <div className='flex items-center gap-3 mt-5'>
-            <div className='rounded-[60px] w-[267px] flex-shrink-0 flex justify-center  bg-purple p-4 text-white font-medium text-[18px] leading-normal cursor-pointer'>
+            <div className='rounded-[60px] max-w-[267px] flex-shrink-0 flex justify-center  bg-purple p-4 text-white font-medium text-[18px] leading-normal cursor-pointer'>
               Start a New Store
             </div>
             <div className='text-[#94A2B3] text-[18px] font-normal leading-[25px]'>
@@ -43,9 +43,9 @@ export const HeroSection = () => {
             </div>
           </div>
         </div>
-        <div className='h-[929px] max-w-[867px] overflow-hidden'>
+        <div className='h-[929px] lg:max-w-[867px] md:max-w-screen-md max-w-screen-sm overflow-hidden'>
           <div className='relative w-[1027px]'>
-            <div className='absolute w-[250px] flex flex-wrap gap-10 top-[460px] right-32 z-0'>
+            <div className='absolute w-[250px] flex flex-wrap gap-10 top-[460px] right-52 z-0'>
               {svgs.map((_, index) => (
                 <svg
                   key={index}
@@ -64,7 +64,7 @@ export const HeroSection = () => {
                 </svg>
               ))}
             </div>
-            <div className='absolute w-[450px] flex flex-wrap gap-10 top-72 right-[507px] z-0'>
+            <div className='absolute w-[450px] flex flex-wrap gap-10 top-72 left-0 z-0'>
               {svgs.map((_, index) => (
                 <svg
                   key={index}
@@ -83,7 +83,7 @@ export const HeroSection = () => {
                 </svg>
               ))}
             </div>
-            <div className='absolute w-[250px] flex flex-wrap gap-10 top-[167px] right-48 z-0'>
+            <div className='absolute w-[250px] flex flex-wrap gap-10 top-[167px] right-96 z-0'>
               {svgs.map((_, index) => (
                 <svg
                   key={index}
@@ -102,7 +102,7 @@ export const HeroSection = () => {
                 </svg>
               ))}
             </div>
-            <div className='absolute top-44 right-[589px] w-[345px] h-[206px] z-10'>
+            <div className='absolute top-44 right-[669px] w-[345px] h-[206px] z-10'>
               <Image
                 src={Image15}
                 alt='images'
@@ -111,7 +111,7 @@ export const HeroSection = () => {
                 className='rounded-2xl relative'
               />
             </div>
-            <div className='absolute top-72 -right-12 z-[9]'>
+            <div className='absolute top-72 right-8 z-[9]'>
               <div className='flex bg-[#FFF] w-[907px] h-[421px]'>
                 <Image
                   src={Bitmap}
@@ -144,7 +144,7 @@ export const HeroSection = () => {
                     />
                   </svg>
                 </div>
-                <div className='absolute -bottom-20 right-72 z-10'>
+                <div className='absolute -bottom-14 right-72 z-10'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='99'
@@ -316,6 +316,6 @@ export const HeroSection = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

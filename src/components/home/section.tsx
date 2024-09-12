@@ -4,8 +4,8 @@ import { Rectangle233, Rectangle236 } from '../../../public/page'
 export const Section = () => {
   const svgs = new Array(50).fill(0)
   return (
-    <div className='mt-28 relative overflow-hidden'>
-      <div className='absolute top-10 w-[1920px] h-[1110px]'>
+    <div className='mt-28 relative 3xl:max-w-screen-3xl overflow-hidden'>
+      <div className='absolute top-10 3xl:max-w-[1920px] w-full'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='1920'
@@ -19,21 +19,21 @@ export const Section = () => {
           />
         </svg>
       </div>
-      <div className='absolute -top-72 right-[500px]'>
-        <div className='text-[520px] text-[#FFFFFF] opacity-10 '>w</div>
+      <div className='absolute -top-56 right-[300px]'>
+        <div className='text-[400px] text-[#FFFFFF] opacity-10 '>w</div>
       </div>
-      <div className='absolute -top-72 right-[170px]'>
-        <div className='text-[520px] text-[#FFFFFF]  opacity-10 '>O</div>
+      <div className='absolute -top-56 right-12'>
+        <div className='text-[400px] text-[#FFFFFF]  opacity-10 '>O</div>
       </div>
-      <div className='absolute -top-72 -right-[150px]'>
-        <div className='text-[520px] text-[#FFFFFF]  opacity-10 '>O</div>
+      <div className='absolute -top-56 -right-48'>
+        <div className='text-[400px] text-[#FFFFFF]  opacity-10 '>O</div>
       </div>
-      <div className='relative max-w-[1920px] h-[1190px]'>
-        <div className='flex gap-[70px] ml-[345px] relative'>
-          <div className='w-[430px] h-[548] relative z-20'>
+      <div className='relative 3xl:max-w-[1920px] container mx-auto h-[1190px] flex flex-col md:text-left text-center justify-center items-center'>
+        <div className='flex md:flex-row flex-col gap-[70px] 3xl:ml-[345px] relative'>
+          <div className='w-[430px] h-[548] relative z-20 md:block hidden'>
             <Image src={Rectangle236} alt='images' width={430} height={548} />
           </div>
-          <div className='absolute top-36 -left-20'>
+          <div className='md:absolute hidden top-36 -left-20'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='65'
@@ -50,7 +50,7 @@ export const Section = () => {
               />
             </svg>
           </div>
-          <div className='absolute top-36 -left-20 z-0'>
+          <div className='md:absolute hidden top-36 -left-20 z-0'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='401'
@@ -67,7 +67,7 @@ export const Section = () => {
               />
             </svg>
           </div>
-          <div className='absolute w-[250px] flex flex-wrap gap-10 -bottom-64 -left-8 z-0'>
+          <div className='md:absolute hidden max-w-[250px] md:flex flex-wrap gap-10 -bottom-64 -left-8 z-0'>
             {svgs.map((_, index) => (
               <svg
                 key={index}
@@ -81,30 +81,30 @@ export const Section = () => {
               </svg>
             ))}
           </div>
-          <div className='mt-28'>
-            <div className='w-[435px] text-4xl leading-normal font-bold text-[#FFF]'>
+          <div className='md:mt-28 mt-2'>
+            <div className='max-w-[435px] lg:text-4xl text-2xl leading-normal font-bold text-[#FFF]'>
               Develop
               <br /> Without Limits
             </div>
-            <div className='w-[480px] text-lg font-normal text-[#FFF] mt-[13px] leading-[30px]'>
+            <div className='max-w-[480px] lg:text-lg text-md font-normal text-[#FFF] mt-[13px] leading-[30px]'>
               WooCommerce is developer friendly, too. Built with a REST API,
               WooCommerce is scalable and can integrate with virtually any
               service. Design a complex store from scratch, extend a store for a
               client, or simply add a single product to a WordPress site—your
               store, your way.
             </div>
-            <button className='rounded-[60px] text-center mt-[39px] bg-[#70C217] text-[#fff] w-[256px] px-[26px] py-[22px]'>
+            <button className='rounded-[60px] text-center mt-[39px] bg-[#70C217] text-[#fff] max-w-[256px] px-[26px] py-[22px]'>
               Read the Documentation
             </button>
           </div>
         </div>
-        <div className='flex ml-[595px] gap-[70px] mt-32 relative'>
+        <div className='flex md:flex-row flex-col 3xl:ml-[595px] xl:ml-[350px] gap-[70px] mt-32 relative'>
           <div className='mt-6'>
-            <div className='w-[435px] text-4xl font-bold leading-normal text-[#FFF]'>
+            <div className='max-w-[435px] lg:text-4xl text-2xl font-bold leading-normal text-[#FFF]'>
               Know our <br />
               Global Community
             </div>
-            <div className='w-[480px] text-lg font-normal text-[#FFF] mt-[13px] leading-[30px]'>
+            <div className='max-w-[480px] lg:text-lg text-md font-normal text-[#FFF] mt-[13px] leading-[30px]'>
               WooCommerce is one of the fastest-growing eCommerce communities.
               We’re proud that the helpfulness of the community and a wealth of
               online resources are frequently cited as reasons our users love
@@ -114,7 +114,7 @@ export const Section = () => {
               Read the Documentation
             </button>
           </div>
-          <div className='relative'>
+          <div className='relative md:block hidden '>
             <div className='w-[430px] h-[548] relative z-10'>
               <Image src={Rectangle233} alt='images' width={430} height={548} />
               <div className='absolute left-32 -top-2'>
@@ -152,7 +152,7 @@ export const Section = () => {
                 />
               </svg>
             </div>
-            <div className='absolute w-[450px] flex flex-wrap gap-10 bottom-28 -right-40'>
+            <div className='absolute max-w-[450px] flex flex-wrap gap-10 bottom-28 -right-40'>
               {svgs.map((_, index) => (
                 <svg
                   key={index}

@@ -25,6 +25,9 @@ const config: Config = {
         'testimonial-background':
           'linear-gradient(180deg, rgba(236, 240, 253, 0.00) 0%, rgba(236, 240, 253, 0.53) 14.32%, #ECF0FD 45.83%, rgba(236, 240, 253, 0.43) 84.33%, rgba(236, 240, 253, 0.00) 100%)',
       },
+      screens: {
+        '3xl': '1920px',
+      },
     },
   },
   plugins: [],
