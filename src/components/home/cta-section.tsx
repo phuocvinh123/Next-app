@@ -2,7 +2,7 @@ export const CtaSection = () => {
   return (
     <div className='max-w-[1920px] py-[78px] bg-[#5F37EF] relative z-20  flex justify-center items-center '>
       <div className='flex md:flex-row flex-col gap-[61px] items-center justify-center text-[#FFF] 3xl:max-w-[1129px] container mx-auto'>
-        <div className='w-[855px] h-[105px]  text-white xl:text-4xl text-2xl md:text-left text-center'>
+        <div className=' h-[105px]  text-white xl:text-4xl text-2xl md:text-left text-center'>
           <span className='font-normal leading-[52.50px]'>
             WooCommerce - the{' '}
           </span>

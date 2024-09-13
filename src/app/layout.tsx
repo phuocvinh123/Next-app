@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Inter, Roboto } from 'next/font/google'
 import './globals.css'
-import { Header } from '@/components/common/header'
-import { Footer } from '@/components/common/footer'
-
+import { AuthProvider } from '@/components/auth/use-auth'
+import { ChakraProvider } from '@chakra-ui/react'
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -18,7 +17,7 @@ const roboto = Roboto({
   weight: '400',
 })
 
-const CirularStd = localFont({
+const CircularStd = localFont({
   src: './fonts/CircularStd-BoldItalic.woff',
   variable: '--font-CircularStd-sans',
   weight: '100',
@@ -37,11 +36,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={` ${inter.variable} ${roboto.variable} ${CirularStd.variable}   antialiased`}
+        className={`${inter.variable} ${roboto.variable} ${CircularStd.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <ChakraProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ChakraProvider>
       </body>
     </html>
   )

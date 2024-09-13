@@ -6,7 +6,7 @@ export const PeopleSection = () => {
   return (
     <div className='3xl:max-w-[1920px] max-w-full  mt-6 relative overflow-hidden'>
       <div className='flex flex-col justify-center items-center'>
-        <div className='text-center sm:text-[55px] text-2xl font-bold leading-[70px] text-[#272D4E]'>
+        <div className='text-center sm:text-[55px] text-2xl font-bold leading-[70px] text-[#272D4E] mt-10'>
           Supported by real people
         </div>
         <div className='text-center w-[660px] text-[#94A2B3] text-lg font-normal mt-[31px]'>

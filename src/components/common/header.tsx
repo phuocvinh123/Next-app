@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Logo } from '../../../public/page'
+import Link from 'next/link'
 
 export const Header = () => {
   return (
@@ -17,7 +18,9 @@ export const Header = () => {
         </div>
       </div>
       <div className='xl:flex items-center gap-[38px] hidden font-medium text-lg '>
-        <div className='text-[#272D4E] cursor-pointer'>Log In</div>
+        <Link href={'/login'} className='text-[#272D4E] cursor-pointer'>
+          Log In
+        </Link>
         <div className='rounded-[5px] text-white bg-purple px-[14px] py-[13px] cursor-pointer'>
           Get Started
         </div>
