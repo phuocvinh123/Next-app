@@ -1,8 +1,7 @@
-// components/ListProduct.tsx
 'use client'
 
+import { useSelector, useDispatch } from 'react-redux'
 import ShowCart from '@/components/cart/show-cart'
-import { addCart, Product } from '@/components/interfaces/interface'
 import { ListCategory } from '@/components/product/list-category'
 import {
   Card,
@@ -19,49 +18,57 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { RootState } from '@/components/store/store'
+import {
+  fetchProductsFailure,
+  fetchProductsStart,
+  fetchProductsSuccess,
+  setSelectedCategory,
+} from '@/components/slice/product-slice'
 
 const ListProduct = () => {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState('')
-  const [addCarts, setAddCards] = useState<addCart[]>([])
+  const dispatch = useDispatch()
+  const { products, loading, error, selectedCategory } = useSelector(
+    (state: RootState) => state.product
+  )
+
+  const userId =
+    typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem('user') || '{}').id
+      : null
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true)
+      dispatch(fetchProductsStart())
       try {
-        const url = selectedCategory
-          ? `https://fakestoreapi.com/products/category/${selectedCategory}`
-          : 'https://fakestoreapi.com/products'
+        const url = `http://localhost:9002/api/products/${selectedCategory}`
         const response = await fetch(url)
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const data: Product[] = await response.json()
-        setProducts(data)
+        const data = await response.json()
+        dispatch(fetchProductsSuccess(data))
       } catch (err) {
-        setError('Something went wrong. Please try again.')
-      } finally {
-        setLoading(false)
+        dispatch(
+          fetchProductsFailure('Something went wrong. Please try again.')
+        )
       }
     }
 
     fetchProducts()
-  }, [selectedCategory])
+  }, [dispatch, selectedCategory])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const addToCart = async (productId: any) => {
+  const handleAddToCart = async (productId: number) => {
     const cartData = {
-      userId: 5,
+      userId: userId,
       date: new Date().toISOString(),
-      products: [{ productId: productId, quantity: 1 }],
+      productId: productId,
     }
 
     try {
-      const res = await fetch('https://fakestoreapi.com/carts', {
+      const res = await fetch('http://localhost:9002/api/carts/addCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,23 +79,19 @@ const ListProduct = () => {
       if (!res.ok) {
         throw new Error('Network response was not ok')
       }
-
-      const data: addCart = await res.json()
-      setAddCards((prevCarts) => [...prevCarts, data])
+      toast.success('Thêm sản phẩm thành công')
     } catch (error) {
       console.error('Error:', error)
     }
   }
 
-  useEffect(() => {
-    console.log('Updated addCarts:', addCarts)
-  }, [addCarts])
-
   return (
     <div>
       <div className='flex justify-between'>
         <ListCategory
-          setSelectedCategory={setSelectedCategory}
+          setSelectedCategory={(category) =>
+            dispatch(setSelectedCategory(category))
+          }
           selectedCategory={selectedCategory}
         />
         <ShowCart />
@@ -130,7 +133,7 @@ const ListProduct = () => {
                 <Button
                   variant='solid'
                   colorScheme='blue'
-                  onClick={() => addToCart(product.id)}
+                  onClick={() => handleAddToCart(product.id)}
                 >
                   Add to cart
                 </Button>

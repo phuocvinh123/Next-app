@@ -4,6 +4,9 @@ import { Inter, Roboto } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/components/auth/use-auth'
 import { ChakraProvider } from '@chakra-ui/react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -40,6 +43,7 @@ export default function RootLayout({
       >
         <ChakraProvider>
           <AuthProvider>{children}</AuthProvider>
+          <ToastContainer />
         </ChakraProvider>
       </body>
     </html>
