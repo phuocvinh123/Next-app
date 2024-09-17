@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/components/store/store'
+import { setCookie } from 'cookies-next'
 import {
   loginFailure,
   loginStart,
@@ -42,7 +43,7 @@ const LoginForm = () => {
         throw new Error(user.message || 'Login failed')
       }
 
-      cookies.set('userId', user.userId)
+      setCookie('userId', user.id)
       dispatch(loginSuccess({ token: user.token, user }))
       toast.success('Login successful')
       router.push('/product')

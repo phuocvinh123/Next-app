@@ -3,6 +3,7 @@ package com.example.apinext.controller.api;
 import com.example.apinext.model.Cart;
 import com.example.apinext.model.DTO.CartDTO;
 import com.example.apinext.model.Product;
+import com.example.apinext.service.cart.CartService;
 import com.example.apinext.service.cart.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class CartApi {
     @Autowired
-    private ICartService cartService;
+    private CartService cartService;
 
     @PostMapping("/addCart")
     public ResponseEntity<?> addCart(@RequestBody CartDTO CartDTO) {
@@ -25,8 +26,8 @@ public class CartApi {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getAllCartByUserId(@PathVariable Long userId) {
-        List<Cart> cart = cartService.getCartUserId(userId);
+    public ResponseEntity<?> getAllCartByCustomerId(@PathVariable Long userId) {
+        List<Cart> cart = cartService.getCartCustomerId(userId);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 

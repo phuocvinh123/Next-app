@@ -5,7 +5,6 @@ import {
   fetchCartSuccess,
 } from '@/components/slice/cart-slice'
 import { RootState } from '@/components/store/store'
-import Swal from 'sweetalert2'
 import {
   Box,
   Button,
@@ -23,7 +22,13 @@ import {
 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
+import { getCookie } from 'cookies-next'
+import {
+  handleDeleteCart,
+  handleMinusCart,
+  handlePlusCart,
+} from '@/components/utils/cartUtils'
+import { useRouter } from 'next/navigation'
 
 const ShowCart = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -31,10 +36,7 @@ const ShowCart = () => {
   const [shouldFetchCart, setShouldFetchCart] = useState(false)
   const dispatch = useDispatch()
   const { items: carts } = useSelector((state: RootState) => state.cart)
-  const userId =
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('user') || '{}').id
-      : null
+  const userId = getCookie('userId')
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -54,80 +56,15 @@ const ShowCart = () => {
     fetchCart()
   }, [isOpen, dispatch, userId, shouldFetchCart])
 
-  const handleMinusCart = async (cartId: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:9002/api/carts/minus/${cartId}`
-      )
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      toast.success('Reduce the number of successful products')
-      setShouldFetchCart((prev) => !prev)
-    } catch (error) {
-      console.error('Error:', error)
-      toast.error('Quantity cannot be less than 1 ')
-    }
-  }
-
-  const handlePlusCart = async (cartId: number) => {
-    try {
-      const response = await fetch(
-        `http://localhost:9002/api/carts/plus/${cartId}`
-      )
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      toast.success('Increase the number of successful products')
-      setShouldFetchCart((prev) => !prev)
-    } catch (error) {
-      console.error('Error:', error)
-      toast.error('An error occurred while increasing the product quantity.')
-    }
-  }
-
-  const handleDeleteCart = async (cartId: number) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-      backdrop: true,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const response = await fetch(
-            `http://localhost:9002/api/carts/delete/${cartId}`,
-            {
-              method: 'DELETE',
-            }
-          )
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-          }
-          toast.success('Sản phẩm đã được xóa')
-          setShouldFetchCart((prev) => !prev)
-          Swal.fire({
-            title: 'Deleted!',
-            text: 'Your item has been deleted.',
-            icon: 'success',
-            backdrop: true,
-          })
-        } catch (error) {
-          console.error('Error:', error)
-          toast.error('Có lỗi xảy ra khi xóa sản phẩm')
-        }
-      }
-    })
-  }
+  const router = useRouter()
 
   const handleByNow = () => {
-    window.location.href = '/order'
+    router.push('/order-now')
   }
+
+  const totalPrice = carts
+    .reduce((acc, cart) => acc + cart.product.price * cart.quantity, 0)
+    .toFixed(2)
 
   return (
     <>
@@ -192,7 +129,9 @@ const ShowCart = () => {
                   <div className='flex gap-2 relative' key={cart.id}>
                     <div
                       className='absolute top-0 -left-4 cursor-pointer hover:bg-red-600 hover:rounded-full'
-                      onClick={() => handleDeleteCart(cart.id)}
+                      onClick={() =>
+                        handleDeleteCart(cart.id, setShouldFetchCart)
+                      }
                     >
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
@@ -224,8 +163,12 @@ const ShowCart = () => {
                       <Text isTruncated maxW='150px' className=' mt-4'>
                         {cart.product.description}
                       </Text>
-                      <div className='flex gap-5 mt-10 bg-[#F6F6F6] justify-center items-center p-2 w-[125px] h-[40px]'>
-                        <Button onClick={() => handleMinusCart(cart.id)}>
+                      <div className='flex gap-5 mt-4 bg-[#F6F6F6] justify-center items-center p-2 w-[125px] h-[40px]'>
+                        <Button
+                          onClick={() =>
+                            handleMinusCart(cart.id, setShouldFetchCart)
+                          }
+                        >
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='8'
@@ -242,7 +185,11 @@ const ShowCart = () => {
                           </svg>
                         </Button>
                         <div>{cart.quantity}</div>
-                        <Button onClick={() => handlePlusCart(cart.id)}>
+                        <Button
+                          onClick={() =>
+                            handlePlusCart(cart.id, setShouldFetchCart)
+                          }
+                        >
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='8'
@@ -259,6 +206,12 @@ const ShowCart = () => {
                           </svg>
                         </Button>
                       </div>
+                      <div className='flex gap-5 mt-4'>
+                        <div className='font-bold'>Price:</div>
+                        <Text isTruncated maxW='150px'>
+                          {cart.product.price * cart.quantity} $
+                        </Text>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -270,7 +223,7 @@ const ShowCart = () => {
               Cancel
             </Button>
             <Button colorScheme='blue' onClick={() => handleByNow()}>
-              Buy now
+              Buy now ({totalPrice} $)
             </Button>
           </DrawerFooter>
         </DrawerContent>

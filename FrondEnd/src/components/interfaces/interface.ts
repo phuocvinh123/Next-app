@@ -15,10 +15,28 @@ export interface Product {
 
 export interface Cart {
   id: number
-  user: User
+  customer: Customer
   date: string
   product: Product
   quantity: number
+}
+
+export interface Order {
+  id: number
+  customer: Customer
+  date: string
+  product: Product
+  quantity: number
+}
+
+export interface Customer {
+  id: number
+  fullName: string
+  date: string
+  phone: string
+  email: string
+  address: string
+  user: User
 }
 export interface ListCategoryProps {
   selectedCategory: string

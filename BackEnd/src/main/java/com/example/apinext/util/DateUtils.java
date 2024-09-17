@@ -13,7 +13,6 @@ public class DateUtils {
 
     public static LocalDate convertStringToLocalDate(String dateTimeString) {
         try {
-            // Chuyển đổi chuỗi thành OffsetDateTime và sau đó lấy LocalDate
             OffsetDateTime offsetDateTime = OffsetDateTime.parse(dateTimeString);
             return offsetDateTime.toLocalDate();
         } catch (DateTimeParseException e) {

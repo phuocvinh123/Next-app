@@ -4,14 +4,20 @@ import Link from 'next/link'
 import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { toast } from 'react-toastify'
+import { deleteCookie, getCookie } from 'cookies-next'
+import { useEffect, useState } from 'react'
 export const Header = () => {
-  const userId =
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('user') || '{}').id
-      : null
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) return null
+  const userId = getCookie('userId')
 
   const handleLogOut = () => {
-    localStorage.clear()
+    deleteCookie('userId')
     toast.success('Log Out Successfully')
     window.location.href = '/'
   }
@@ -19,7 +25,9 @@ export const Header = () => {
     <div className='3xl:max-w-[1920px] container mx-auto 3xl:px-14 pt-10 flex justify-between relative z-10 '>
       <div className='flex items-center '>
         <div className='flex justify-center items-center w-[170px]'>
-          <Image src={Logo} alt='images' width={169} height={34} />
+          <Link href={'/'}>
+            <Image src={Logo} alt='images' width={169} height={34} />
+          </Link>
         </div>
         <div className='lg:flex justify-center items-center text-center gap-[38px] ml-36 hidden font-medium text-lg leading-normal text-[#272D4E] not-italic cursor-pointer'>
           <div>Sell</div>
@@ -71,7 +79,15 @@ export const Header = () => {
               </svg>
             </MenuButton>
             <MenuList>
-              <MenuItem>Order History</MenuItem>
+              <MenuItem as='a' href={'/product'}>
+                Product
+              </MenuItem>
+              <MenuItem as='a' href={'/order-now'}>
+                Order Now
+              </MenuItem>
+              <MenuItem as='a' href={'/history-order'}>
+                Order History
+              </MenuItem>
               <MenuItem onClick={() => handleLogOut()}>Log Out</MenuItem>
             </MenuList>
           </Menu>

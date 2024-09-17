@@ -1,7 +1,5 @@
 package com.example.apinext.model;
 
-import com.example.apinext.model.DTO.CartDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Table(name = "carts")
@@ -22,14 +19,12 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
-    private User user;
-
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     private LocalDate date;
-
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
-
     private int quantity;
 }

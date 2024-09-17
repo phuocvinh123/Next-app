@@ -1,7 +1,11 @@
 package com.example.apinext.service.order;
 
+import com.example.apinext.model.Cart;
+import com.example.apinext.model.DTO.OrderDTO;
 import com.example.apinext.model.Order;
 import com.example.apinext.repository.IOrderRepository;
+import com.example.apinext.service.cart.CartService;
+import com.example.apinext.util.DateUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,8 @@ import java.util.Optional;
 public class OrderService implements IOrderService{
     @Autowired
     private IOrderRepository orderRepository;
+    @Autowired
+    private CartService cartService;
     @Override
     public List<Order> findAll() {
         return orderRepository.findAll();
@@ -21,7 +27,7 @@ public class OrderService implements IOrderService{
 
     @Override
     public Optional<Order> findById(Long id) {
-        return orderRepository.findById(id);
+        return orderRepository.findById(String.valueOf(id));
     }
 
     @Override
@@ -31,16 +37,27 @@ public class OrderService implements IOrderService{
 
     @Override
     public void deleteById(Long id) {
-    orderRepository.deleteById(id);
+    orderRepository.deleteById(String.valueOf(id));
     }
 
     @Override
-    public List<Order> findAllByUser_Id(Long user_id) {
-        return orderRepository.findAllByUser_Id(user_id);
+    public List<Order> findAllByCustomer_Id(Long customer_id) {
+        return orderRepository.findAllByCustomer_Id(customer_id);
     }
 
     @Override
-    public List<Order> saveAllByUser_Id(Long user_id) {
-        return orderRepository.saveAllByUser_Id(user_id);
+    public void addOrder(OrderDTO orderDto) {
+        List<Cart> ListCart = cartService.getCartCustomerId(orderDto.getCustomerId());
+       for (Cart cart : ListCart) {
+           Order order = new Order();
+           order.setCustomer(cart.getCustomer());
+           order.setQuantity(cart.getQuantity());
+           order.setDate(DateUtils.convertStringToLocalDate(orderDto.getDate()));
+           order.setProduct(cart.getProduct());
+           orderRepository.save(order);
+           cartService.deleteById(cart.getId());
+       }
     }
+
+
 }

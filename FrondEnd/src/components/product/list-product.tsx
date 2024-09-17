@@ -27,6 +27,7 @@ import {
   fetchProductsSuccess,
   setSelectedCategory,
 } from '@/components/slice/product-slice'
+import { getCookie } from 'cookies-next'
 
 const ListProduct = () => {
   const dispatch = useDispatch()
@@ -34,10 +35,7 @@ const ListProduct = () => {
     (state: RootState) => state.product
   )
 
-  const userId =
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('user') || '{}').id
-      : null
+  const userId = getCookie('userId')
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -62,7 +60,7 @@ const ListProduct = () => {
 
   const handleAddToCart = async (productId: number) => {
     const cartData = {
-      userId: userId,
+      customerId: userId,
       date: new Date().toISOString(),
       productId: productId,
     }
