@@ -13,6 +13,7 @@ interface ProductState {
   loading: boolean
   error: string | null
   selectedCategory: string
+  change: boolean
 }
 
 const initialState: ProductState = {
@@ -20,6 +21,7 @@ const initialState: ProductState = {
   loading: false,
   error: null,
   selectedCategory: '',
+  change: false,
 }
 
 const productSlice = createSlice({
@@ -41,6 +43,9 @@ const productSlice = createSlice({
     setSelectedCategory(state, action: PayloadAction<string>) {
       state.selectedCategory = action.payload
     },
+    setChange(state, action: PayloadAction<boolean>) {
+      state.change = action.payload
+    },
   },
 })
 
@@ -49,6 +54,7 @@ export const {
   fetchProductsSuccess,
   fetchProductsFailure,
   setSelectedCategory,
+  setChange,
 } = productSlice.actions
 
 export default productSlice.reducer

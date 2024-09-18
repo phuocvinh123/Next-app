@@ -2,31 +2,9 @@
 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchCustomerFailure,
-  fetchCustomerStart,
-  fetchCustomerSuccess,
-} from '@/components/slice/customer-slice'
 import { RootState } from '@/components/store/store'
 import { getCookies } from 'cookies-next'
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  useDisclosure,
-  Image,
-  Spinner,
-} from '@chakra-ui/react'
+import { Box, Button, Text, Image, Spinner } from '@chakra-ui/react'
 
 import {
   handleDeleteCart,
@@ -39,80 +17,26 @@ import {
   fetchCartSuccess,
 } from '@/components/slice/cart-slice'
 import { Cart } from '@/components/interfaces/interface'
-import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 const OrderList = () => {
   const [shouldFetchCart, setShouldFetchCart] = useState(false)
   const dispatch = useDispatch()
   const {
-    item: customers,
+    items: carts,
     loading,
     error,
-  } = useSelector((state: RootState) => state.customer)
-  const { items: carts } = useSelector((state: RootState) => state.cart)
+  } = useSelector((state: RootState) => state.cart)
   const cookies = getCookies()
   const customerId = cookies.userId
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const initialRef = React.useRef(null)
-  const finalRef = React.useRef(null)
-  const [fullName, setFullName] = useState(customers?.fullName || '')
-  const [phone, setPhone] = useState(customers?.phone || '')
-  const [address, setAddress] = useState(customers?.address || '')
-  const [change, setChange] = useState(false)
-
+  const router = useRouter()
   useEffect(() => {
-    const fetchCustomer = async () => {
-      dispatch(fetchCustomerStart())
-      try {
-        const url = `http://localhost:9002/api/customers/${customerId}`
-        const response = await fetch(url)
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        const data = await response.json()
-        setFullName(data.fullName)
-        setPhone(data.phone)
-        setAddress(data.address)
-        dispatch(fetchCustomerSuccess(data))
-      } catch (err) {
-        dispatch(
-          fetchCustomerFailure('Something went wrong. Please try again.')
-        )
-      }
+    if (!customerId) {
+      toast.error('Please login to perform the next functions..')
+      router.push('/login')
     }
-    if (customerId) {
-      fetchCustomer()
-    }
-  }, [customerId, dispatch, change])
-
-  const handleSave = async () => {
-    const updatedCustomer = { customerId, fullName, phone, address }
-
-    try {
-      const res = await fetch('http://localhost:9002/api/customers/update', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedCustomer),
-      })
-
-      if (!res.ok) {
-        throw new Error('Failed to update customer info')
-      }
-
-      const updatedData = await res.json()
-      dispatch(fetchCustomerSuccess(updatedData))
-      setChange((prev) => !prev)
-      toast.success('Customer info updated successfully!')
-      onClose()
-    } catch (error) {
-      toast.error('Failed to update customer info')
-    }
-  }
+  }, [])
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -131,34 +55,13 @@ const OrderList = () => {
     }
     fetchCart()
   }, [dispatch, customerId, shouldFetchCart])
-  const router = useRouter()
+
   const handleBack = () => {
     router.push('/product')
   }
 
   const handleOrderNow = async () => {
-    const orderData = {
-      customerId: customerId,
-      date: new Date().toISOString(),
-    }
-
-    try {
-      const res = await fetch('http://localhost:9002/api/orders/orderNow', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      })
-
-      if (!res.ok) {
-        throw new Error('Network response was not ok')
-      }
-      setShouldFetchCart((prev) => !prev)
-      toast.success('Order has been placed successfully')
-    } catch (error) {
-      console.error('Error:', error)
-    }
+    router.push('/buy-order')
   }
 
   const totalPrice = carts
@@ -173,105 +76,9 @@ const OrderList = () => {
         </div>
       )}
 
-      <div className=' my-20 ml-96 '>
-        <div className='text-5xl text-purple font-medium'>Thanh Toán</div>
+      <div className='my-20 ml-96 '>
         {loading && <div>Loading...</div>}
         {error && <div className='text-red-500'>{error}</div>}
-
-        <div className='flex gap-2 items-center mt-10 text-red-400'>
-          <div>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className='size-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'
-              />
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z'
-              />
-            </svg>
-          </div>
-          <div className='text-2xl font-normal text-center'>
-            Địa chỉ nhận hàng
-          </div>
-        </div>
-        {customers && (
-          <div className='flex gap-2 mt-10 font-normal text-xl items-center text-center'>
-            <div className='font-bold'>{customers.fullName}</div>
-            <div className='font-bold'>{customers.phone}</div>
-            <div className='text-base'>{customers.address}</div>
-            <div>
-              <div
-                className='text-sm text-[#4080ee] ml-2 cursor-pointer'
-                onClick={onOpen}
-              >
-                Thay đổi
-              </div>
-              <Modal
-                initialFocusRef={initialRef}
-                finalFocusRef={finalRef}
-                isOpen={isOpen}
-                onClose={onClose}
-              >
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>Địa chỉ mới</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody pb={6}>
-                    <FormControl>
-                      <FormLabel>fullName</FormLabel>
-                      <Input
-                        ref={initialRef}
-                        placeholder='fullName'
-                        onChange={(e) => setFullName(e.target.value)}
-                        value={fullName}
-                      />
-                    </FormControl>
-
-                    <FormControl mt={4}>
-                      <FormLabel>Phone</FormLabel>
-                      <Input
-                        placeholder='phone'
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </FormControl>
-
-                    <FormControl mt={4}>
-                      <FormLabel>Address</FormLabel>
-                      <Input
-                        placeholder='address'
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                    </FormControl>
-                  </ModalBody>
-
-                  <ModalFooter>
-                    <Button
-                      colorScheme='blue'
-                      mr={3}
-                      onClick={() => handleSave()}
-                    >
-                      Save
-                    </Button>
-                    <Button onClick={onClose}>Cancel</Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
-            </div>
-          </div>
-        )}
-
         <div className='mt-20 font-normal text-xl'>Sản phẩm</div>
         <div className='flex flex-col gap-10'>
           {carts.length === 0 ? (

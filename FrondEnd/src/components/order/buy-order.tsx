@@ -10,7 +10,6 @@ import {
 import { RootState } from '@/components/store/store'
 import { getCookies } from 'cookies-next'
 import {
-  Box,
   Button,
   FormControl,
   FormLabel,
@@ -26,23 +25,26 @@ import {
   useDisclosure,
   Image,
   Spinner,
+  TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
 } from '@chakra-ui/react'
-
-import {
-  handleDeleteCart,
-  handleMinusCart,
-  handlePlusCart,
-} from '@/components/utils/cartUtils'
 import {
   fetchCartFailure,
   fetchCartStart,
   fetchCartSuccess,
 } from '@/components/slice/cart-slice'
-import { Cart } from '@/components/interfaces/interface'
+import { Cart, Order } from '@/components/interfaces/interface'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import Swal from 'sweetalert2'
 
 const BuyOrder = () => {
+  const [isClient, setIsClient] = useState(false)
   const [shouldFetchCart, setShouldFetchCart] = useState(false)
   const dispatch = useDispatch()
   const {
@@ -60,6 +62,15 @@ const BuyOrder = () => {
   const [phone, setPhone] = useState(customers?.phone || '')
   const [address, setAddress] = useState(customers?.address || '')
   const [change, setChange] = useState(false)
+
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!customerId) {
+      toast.error('Please login to perform the next functions..')
+      router.push('/login')
+    }
+  }, [])
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -90,7 +101,6 @@ const BuyOrder = () => {
 
   const handleSave = async () => {
     const updatedCustomer = { customerId, fullName, phone, address }
-
     try {
       const res = await fetch('http://localhost:9002/api/customers/update', {
         method: 'PUT',
@@ -114,6 +124,10 @@ const BuyOrder = () => {
     }
   }
 
+  const totalPrice = carts
+    .reduce((acc, cart) => acc + cart.product.price * cart.quantity, 0)
+    .toFixed(2)
+
   useEffect(() => {
     const fetchCart = async () => {
       if (customerId) {
@@ -131,39 +145,69 @@ const BuyOrder = () => {
     }
     fetchCart()
   }, [dispatch, customerId, shouldFetchCart])
-  const router = useRouter()
+
   const handleBack = () => {
-    router.push('/product')
+    router.push('/order-now')
   }
 
   const handleOrderNow = async () => {
-    const orderData = {
-      customerId: customerId,
-      date: new Date().toISOString(),
-    }
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonColor: '#d33',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, place the order!',
+      reverseButtons: true,
+    })
 
-    try {
-      const res = await fetch('http://localhost:9002/api/orders/orderNow', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      })
-
-      if (!res.ok) {
-        throw new Error('Network response was not ok')
+    if (result.isConfirmed) {
+      const orderData = {
+        customerId: customerId,
+        date: new Date().toISOString(),
+        subTotal: totalPrice,
       }
-      setShouldFetchCart((prev) => !prev)
-      toast.success('Order has been placed successfully')
-    } catch (error) {
-      console.error('Error:', error)
+      dispatch(fetchCustomerStart())
+      try {
+        const res = await fetch(
+          'http://localhost:9002/api/orderDetails/addOrderDetails',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+          }
+        )
+        if (!res.ok) {
+          throw new Error('Network response was not ok')
+        }
+
+        Swal.fire({
+          title: 'Order Placed!',
+          text: 'Your order has been placed successfully.',
+          icon: 'success',
+        })
+        const data: Order = await res.json()
+        setShouldFetchCart((prev) => !prev)
+        router.push(`/order-success/${data.id}`)
+      } catch (error) {
+        console.error('Error:', error)
+        Swal.fire({
+          title: 'Error!',
+          text: 'There was an error placing your order.',
+          icon: 'error',
+        })
+      }
     }
   }
 
-  const totalPrice = carts
-    .reduce((acc, cart) => acc + cart.product.price * cart.quantity, 0)
-    .toFixed(2)
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) return null
 
   return (
     <>
@@ -173,12 +217,12 @@ const BuyOrder = () => {
         </div>
       )}
 
-      <div className=' my-20 ml-96 '>
-        <div className='text-5xl text-purple font-medium'>Thanh Toán</div>
+      <div className=' my-20 container mx-auto '>
+        <div className='text-5xl text-purple font-medium ml-20'>Thanh Toán</div>
         {loading && <div>Loading...</div>}
         {error && <div className='text-red-500'>{error}</div>}
 
-        <div className='flex gap-2 items-center mt-10 text-red-400'>
+        <div className='flex gap-2 items-center mt-10 text-red-400 ml-20'>
           <div>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -205,7 +249,7 @@ const BuyOrder = () => {
           </div>
         </div>
         {customers && (
-          <div className='flex gap-2 mt-10 font-normal text-xl items-center text-center'>
+          <div className='flex gap-2 mt-10 font-normal text-xl items-center text-center ml-20'>
             <div className='font-bold'>{customers.fullName}</div>
             <div className='font-bold'>{customers.phone}</div>
             <div className='text-base'>{customers.address}</div>
@@ -272,96 +316,52 @@ const BuyOrder = () => {
           </div>
         )}
 
-        <div className='mt-20 font-normal text-xl'>Sản phẩm</div>
+        <div className='mt-20 font-normal text-xl ml-20'>Sản phẩm</div>
         <div className='flex flex-col gap-10'>
-          {carts.length === 0 ? (
-            <Text fontSize='3xl' color='gray.500'>
-              Chưa có sản phẩm trong giỏ hàng
-            </Text>
-          ) : (
-            carts.map((cart) => (
-              <div className='mt-10 flex gap-16 relative ' key={cart.id}>
-                <div
-                  className='absolute top-0 -left-4 cursor-pointer hover:bg-red-600 hover:rounded-full'
-                  onClick={() => handleDeleteCart(cart.id, setShouldFetchCart)}
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth='1.5'
-                    stroke='currentColor'
-                    className='size-6'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z'
-                    />
-                  </svg>
-                </div>
-                <Box maxW='120px' maxH='5px'>
-                  <Image
-                    src={cart.product.image}
-                    alt='images'
-                    width={60}
-                    height={40}
-                  />
-                </Box>
-                <div className='flex flex-col mt-10'>
-                  <Text isTruncated maxW='450px' className='font-bold mt-4'>
-                    {cart.product.title}
+          <TableContainer className='mt-20'>
+            <Table variant='simple'>
+              <Thead>
+                <Tr>
+                  <Th textAlign='center'>Image</Th>
+                  <Th>Title</Th>
+                  <Th>Description</Th>
+                  <Th textAlign='center'>Quantity</Th>
+                  <Th isNumeric>Total Price</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {carts.length === 0 ? (
+                  <Text className='text-3xl font-normal text-[#929292]'>
+                    You have not purchased any products, please click buy to
+                    continue viewing
                   </Text>
-                  <Text isTruncated maxW='450px' className=' mt-4'>
-                    {cart.product.description}
-                  </Text>
-                </div>
-                <div className='flex gap-5 mt-16 bg-[#F6F6F6] justify-center items-center p-2 w-[125px] h-[40px]'>
-                  <Button
-                    onClick={() => handleMinusCart(cart.id, setShouldFetchCart)}
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='8'
-                      height='4'
-                      viewBox='0 0 8 4'
-                      fill='none'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        clipRule='evenodd'
-                        d='M6.1463 0.699463H1.47067C0.825429 0.699463 0.301758 1.22313 0.301758 1.86837C0.301758 2.51361 0.825429 3.03728 1.47067 3.03728H6.1463C6.79154 3.03728 7.31521 2.51361 7.31521 1.86837C7.31521 1.22313 6.79154 0.699463 6.1463 0.699463Z'
-                        fill='#222222'
-                      ></path>
-                    </svg>
-                  </Button>
-                  <div>{cart.quantity}</div>
-                  <Button
-                    onClick={() => handlePlusCart(cart.id, setShouldFetchCart)}
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='8'
-                      height='8'
-                      viewBox='0 0 8 8'
-                      fill='none'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        clipRule='evenodd'
-                        d='M6.32159 2.69554H5.15268V1.52664C5.15268 0.881398 4.62901 0.357727 3.98378 0.357727C3.33854 0.357727 2.81487 0.881398 2.81487 1.52664V2.69554H1.64596C1.00072 2.69554 0.477051 3.21921 0.477051 3.86445C0.477051 4.50969 1.00072 5.03336 1.64596 5.03336H2.81487V6.20227C2.81487 6.84751 3.33854 7.37118 3.98378 7.37118C4.62901 7.37118 5.15268 6.84751 5.15268 6.20227V5.03336H6.32159C6.96683 5.03336 7.4905 4.50969 7.4905 3.86445C7.4905 3.21921 6.96683 2.69554 6.32159 2.69554Z'
-                        fill='#222222'
-                      ></path>
-                    </svg>
-                  </Button>
-                </div>
-                <Text isTruncated maxW='450px' className=' mt-[70px]'>
-                  {cart.product.price * cart.quantity} $
-                </Text>
-              </div>
-            ))
-          )}
-
+                ) : (
+                  carts.map((cart) => (
+                    <Tr key={cart.id}>
+                      <Td className='flex justify-center'>
+                        <Image
+                          src={cart.product.image}
+                          alt='images'
+                          width={40}
+                          height={40}
+                        />
+                      </Td>
+                      <Td isTruncated maxW={350}>
+                        {' '}
+                        {cart.product.title}
+                      </Td>
+                      <Td isTruncated maxW={350}>
+                        {' '}
+                        {cart.product.description}
+                      </Td>
+                      <Td textAlign='center'>{cart.quantity}</Td>
+                      <Td isNumeric>{cart.product.price * cart.quantity} $</Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
           <div className='mt-20'>
             <Text fontSize='2xl' className='font-bold'>
               Tổng tiền: {totalPrice} $
@@ -369,7 +369,7 @@ const BuyOrder = () => {
           </div>
           <div className='mt-10 flex gap-10'>
             <Button className='w-56' onClick={() => handleBack()}>
-              continue shopping
+              Back
             </Button>
             {carts.length === 0 ? null : (
               <Button

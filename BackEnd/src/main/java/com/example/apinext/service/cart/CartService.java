@@ -69,5 +69,10 @@ public class CartService implements ICartService{
         return cartRepository.findAllByCustomer_Id(customerId);
     }
 
+    @Override
+    public List<Cart> deleteAllByCustomer_Id(Long customer_id) {
+        return cartRepository.deleteAllByCustomer_Id(customer_id);
+    }
+
 
 }

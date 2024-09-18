@@ -25,8 +25,17 @@ export interface Order {
   id: number
   customer: Customer
   date: string
+  totalProduct: number
+  status: string
+  subTotal: number
+}
+
+export interface OrderDetail {
+  id: number
+  order: Order
   product: Product
   quantity: number
+  totalPrice: number
 }
 
 export interface Customer {

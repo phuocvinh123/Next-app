@@ -29,13 +29,27 @@ export const Header = () => {
             <Image src={Logo} alt='images' width={169} height={34} />
           </Link>
         </div>
-        <div className='lg:flex justify-center items-center text-center gap-[38px] ml-36 hidden font-medium text-lg leading-normal text-[#272D4E] not-italic cursor-pointer'>
-          <div>Sell</div>
-          <div>Marketplace</div>
-          <div>Community</div>
-          <div>Develop</div>
-          <div>Resources</div>
-        </div>
+        {!userId ? (
+          <div className='lg:flex justify-center items-center text-center gap-[38px] ml-36 hidden font-medium text-lg leading-normal text-[#272D4E] not-italic cursor-pointer'>
+            <div>Sell</div>
+            <div>Marketplace</div>
+            <div>Community</div>
+            <div>Develop</div>
+            <div>Resources</div>
+          </div>
+        ) : (
+          <div className='flex justify-center items-center ml-36 text-xl leading-normal text-[#272D4E] not-italic cursor-pointer gap-14 '>
+            <Link href={'/product'} className='hover:text-orange-500'>
+              Product
+            </Link>
+            <Link href={'/order-now'} className='hover:text-orange-500'>
+              Order Now
+            </Link>
+            <Link href={'/history-order'} className='hover:text-orange-500'>
+              Order History
+            </Link>
+          </div>
+        )}
       </div>
       <div className='xl:flex items-center gap-[38px] hidden font-medium text-lg '>
         {!userId ? (

@@ -14,5 +14,5 @@ public interface ICartService extends IGeneralService<Cart,Long> {
     void createCart(CartDTO CartDTO);
     Cart findByCustomerAndProduct(Customer customer, Product product);
     List<Cart> getCartCustomerId(Long customerId);
-
+    List<Cart> deleteAllByCustomer_Id(Long customer_id);
 }

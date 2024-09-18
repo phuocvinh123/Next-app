@@ -38,7 +38,7 @@ public class CustomerService implements ICustomerService{
     public Customer updateCustomer(CustomerDTO customerDto) {
         Customer customer = customerRepository.findById(String.valueOf(customerDto.getCustomerId())).get();
         customer.setEmail(customer.getEmail());
-        customer.setDob(customer.getDob());
+        customer.setDate(customer.getDate());
         customer.setPhone(customerDto.getPhone());
         customer.setUser(customer.getUser());
         customer.setAddress(customerDto.getAddress());

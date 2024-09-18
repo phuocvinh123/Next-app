@@ -42,22 +42,9 @@ public class OrderService implements IOrderService{
 
     @Override
     public List<Order> findAllByCustomer_Id(Long customer_id) {
-        return orderRepository.findAllByCustomer_Id(customer_id);
+        return orderRepository.findAllByCustomer_IdOrderByIdDesc(customer_id);
     }
 
-    @Override
-    public void addOrder(OrderDTO orderDto) {
-        List<Cart> ListCart = cartService.getCartCustomerId(orderDto.getCustomerId());
-       for (Cart cart : ListCart) {
-           Order order = new Order();
-           order.setCustomer(cart.getCustomer());
-           order.setQuantity(cart.getQuantity());
-           order.setDate(DateUtils.convertStringToLocalDate(orderDto.getDate()));
-           order.setProduct(cart.getProduct());
-           orderRepository.save(order);
-           cartService.deleteById(cart.getId());
-       }
-    }
 
 
 }

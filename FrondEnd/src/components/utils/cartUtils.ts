@@ -63,7 +63,6 @@ export const handleDeleteCart = async (
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        toast.success('Sản phẩm đã được xóa')
         setShouldFetchCart((prev) => !prev)
         Swal.fire('Đã xóa!', 'Sản phẩm của bạn đã bị xóa.', 'success')
       } catch (error) {

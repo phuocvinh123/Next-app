@@ -20,7 +20,7 @@ public class Customer {
     private Long id;
 
     private String fullName;
-    private LocalDate dob;
+    private LocalDate date;
     private String phone;
 
     @Column(unique = true)

@@ -30,12 +30,13 @@ import {
 } from '@/components/utils/cartUtils'
 import { useRouter } from 'next/navigation'
 
-const ShowCart = () => {
+const ShowCart = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef<HTMLButtonElement>(null)
   const [shouldFetchCart, setShouldFetchCart] = useState(false)
   const dispatch = useDispatch()
   const { items: carts } = useSelector((state: RootState) => state.cart)
+  const { change } = useSelector((state: RootState) => state.product)
   const userId = getCookie('userId')
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const ShowCart = () => {
       }
     }
     fetchCart()
-  }, [isOpen, dispatch, userId, shouldFetchCart])
+  }, [isOpen, dispatch, userId, shouldFetchCart, change])
 
   const router = useRouter()
 
@@ -69,48 +70,55 @@ const ShowCart = () => {
   return (
     <>
       <Button ref={btnRef} colorScheme='gray' onClick={onOpen}>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          className='ionicon size-6'
-          viewBox='0 0 512 512'
-        >
-          <circle
-            cx='176'
-            cy='416'
-            r='16'
-            fill='none'
-            stroke='currentColor'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='32'
-          />
-          <circle
-            cx='400'
-            cy='416'
-            r='16'
-            fill='none'
-            stroke='currentColor'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='32'
-          />
-          <path
-            fill='none'
-            stroke='currentColor'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='32'
-            d='M48 80h64l48 272h256'
-          />
-          <path
-            d='M160 288h249.44a8 8 0 007.85-6.43l28.8-144a8 8 0 00-7.85-9.57H128'
-            fill='none'
-            stroke='currentColor'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='32'
-          />
-        </svg>
+        <div className='relative'>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            className='ionicon size-6'
+            viewBox='0 0 512 512'
+          >
+            <circle
+              cx='176'
+              cy='416'
+              r='16'
+              fill='none'
+              stroke='currentColor'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='32'
+            />
+            <circle
+              cx='400'
+              cy='416'
+              r='16'
+              fill='none'
+              stroke='currentColor'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='32'
+            />
+            <path
+              fill='none'
+              stroke='currentColor'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='32'
+              d='M48 80h64l48 272h256'
+            />
+            <path
+              d='M160 288h249.44a8 8 0 007.85-6.43l28.8-144a8 8 0 00-7.85-9.57H128'
+              fill='none'
+              stroke='currentColor'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='32'
+            />
+          </svg>
+          {carts.length > 0 ? (
+            <div className='absolute w-6 h-6 rounded-full bg-red-600 text-white -top-4 -right-7'>
+              {carts?.length || 0}
+            </div>
+          ) : null}
+        </div>
       </Button>
       <Drawer
         isOpen={isOpen}
@@ -149,12 +157,14 @@ const ShowCart = () => {
                       </svg>
                     </div>
                     <Box maxW='120px' maxH='5px'>
-                      <Image
-                        src={cart.product.image}
-                        alt='images'
-                        width={60}
-                        height={40}
-                      />
+                      <div className='flex items-center'>
+                        <Image
+                          src={cart.product.image}
+                          alt='images'
+                          width={60}
+                          height={40}
+                        />
+                      </div>
                     </Box>
                     <div>
                       <Text isTruncated maxW='150px' className='font-bold mt-4'>

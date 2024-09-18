@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IOrderService extends IGeneralService<Order,Long> {
     List<Order> findAllByCustomer_Id(Long customer_id);
-    void addOrder(OrderDTO orderDto);
+
 }

@@ -25,17 +25,26 @@ import {
   fetchProductsFailure,
   fetchProductsStart,
   fetchProductsSuccess,
+  setChange,
   setSelectedCategory,
 } from '@/components/slice/product-slice'
 import { getCookie } from 'cookies-next'
+import { useRouter } from 'next/navigation'
 
 const ListProduct = () => {
   const dispatch = useDispatch()
-  const { products, loading, error, selectedCategory } = useSelector(
+  const { products, loading, error, selectedCategory, change } = useSelector(
     (state: RootState) => state.product
   )
-
   const userId = getCookie('userId')
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!userId) {
+      toast.error('Please login to perform the next functions..')
+      router.push('/login')
+    }
+  }, [])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -77,6 +86,7 @@ const ListProduct = () => {
       if (!res.ok) {
         throw new Error('Network response was not ok')
       }
+      dispatch(setChange(!change))
       toast.success('Thêm sản phẩm thành công')
     } catch (error) {
       console.error('Error:', error)
