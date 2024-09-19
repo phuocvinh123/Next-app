@@ -41,7 +41,7 @@ import { useRouter } from 'next/navigation'
 const HistoryOrder = () => {
   const dispatch = useDispatch()
   const { items: orders } = useSelector((state: RootState) => state.order)
-  const customerId = getCookie('userId')
+  const customerId = getCookie('customerId')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([])
   const [isClient, setIsClient] = useState(false)
@@ -126,9 +126,9 @@ const HistoryOrder = () => {
           </Thead>
           <Tbody>
             {orders.length === 0 ? (
-              <Text className='text-3xl font-normal text-[#929292]'>
+              <Text className='text-xl font-normal text-[#929292]'>
                 You have not purchased any products, please click buy to
-                continue viewing
+                continue viewing.
               </Text>
             ) : (
               orders.map((order, index) => (

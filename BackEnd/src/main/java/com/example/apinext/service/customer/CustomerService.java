@@ -46,4 +46,14 @@ public class CustomerService implements ICustomerService{
         customerRepository.save(customer);
         return customer;
     }
+
+    @Override
+    public Optional<Customer> getCustomerByUser_UsernameAndUser_Password(String user_username, String user_password) {
+        return customerRepository.getCustomerByUser_UsernameAndUser_Password(user_username, user_password);
+    }
+
+    @Override
+    public Optional<Customer> getCustomerByUser_Username(String email) {
+        return customerRepository.getCustomerByUser_Username(email);
+    }
 }

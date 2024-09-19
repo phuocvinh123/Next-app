@@ -10,7 +10,6 @@ import { setCookie } from 'cookies-next'
 import {
   loginFailure,
   loginStart,
-  loginSuccess,
   setEmail,
   setPassword,
 } from '@/components/slice/user-slice'
@@ -37,14 +36,14 @@ const LoginForm = () => {
           password: password,
         }),
       })
-      const user = await response.json()
+      const customer = await response.json()
 
       if (!response.ok) {
-        throw new Error(user.message || 'Login failed')
+        throw new Error(customer.message || 'Login failed')
       }
 
-      setCookie('userId', user.id)
-      dispatch(loginSuccess({ token: user.token, user }))
+      setCookie('customerId', customer.id)
+      setCookie('roleCustomer', customer.user.role)
       toast.success('Login successful')
       router.push('/product')
     } catch (err) {
@@ -150,6 +149,12 @@ const LoginForm = () => {
             Privacy Policy
           </Link>
         </p>
+        <Link
+          className='mt-10 ml-40 text-sm hover:text-orange-200'
+          href='/register'
+        >
+          You do not have an account ?
+        </Link>
       </div>
     </>
   )

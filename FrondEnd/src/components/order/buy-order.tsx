@@ -8,7 +8,7 @@ import {
   fetchCustomerSuccess,
 } from '@/components/slice/customer-slice'
 import { RootState } from '@/components/store/store'
-import { getCookies } from 'cookies-next'
+import { getCookie } from 'cookies-next'
 import {
   Button,
   FormControl,
@@ -53,8 +53,7 @@ const BuyOrder = () => {
     error,
   } = useSelector((state: RootState) => state.customer)
   const { items: carts } = useSelector((state: RootState) => state.cart)
-  const cookies = getCookies()
-  const customerId = cookies.userId
+  const customerId = getCookie('customerId')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)

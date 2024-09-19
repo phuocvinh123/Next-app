@@ -37,15 +37,15 @@ const ShowCart = ({}) => {
   const dispatch = useDispatch()
   const { items: carts } = useSelector((state: RootState) => state.cart)
   const { change } = useSelector((state: RootState) => state.product)
-  const userId = getCookie('userId')
+  const customerId = getCookie('customerId')
 
   useEffect(() => {
     const fetchCart = async () => {
-      if (userId) {
+      if (customerId) {
         dispatch(fetchCartStart())
         try {
           const response = await fetch(
-            `http://localhost:9002/api/carts/${userId}`
+            `http://localhost:9002/api/carts/${customerId}`
           )
           const data: Cart[] = await response.json()
           dispatch(fetchCartSuccess(data))
@@ -55,7 +55,7 @@ const ShowCart = ({}) => {
       }
     }
     fetchCart()
-  }, [isOpen, dispatch, userId, shouldFetchCart, change])
+  }, [isOpen, dispatch, customerId, shouldFetchCart, change])
 
   const router = useRouter()
 

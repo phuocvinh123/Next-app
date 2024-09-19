@@ -18,14 +18,11 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String fullName;
     private LocalDate date;
     private String phone;
-
     @Column(unique = true)
     private String email;
-
     private String address;
     @OneToOne
     @JoinColumn(name="user_id")

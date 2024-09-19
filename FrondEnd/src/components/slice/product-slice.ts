@@ -32,6 +32,10 @@ const productSlice = createSlice({
       state.loading = true
       state.error = null
     },
+    fetchProductsEnd(state) {
+      state.loading = false
+      state.error = null
+    },
     fetchProductsSuccess(state, action: PayloadAction<Product[]>) {
       state.loading = false
       state.products = action.payload
@@ -51,6 +55,7 @@ const productSlice = createSlice({
 
 export const {
   fetchProductsStart,
+  fetchProductsEnd,
   fetchProductsSuccess,
   fetchProductsFailure,
   setSelectedCategory,

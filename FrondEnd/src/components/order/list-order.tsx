@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/components/store/store'
-import { getCookies } from 'cookies-next'
+import { getCookie } from 'cookies-next'
 import { Box, Button, Text, Image, Spinner } from '@chakra-ui/react'
 
 import {
@@ -28,8 +28,8 @@ const OrderList = () => {
     loading,
     error,
   } = useSelector((state: RootState) => state.cart)
-  const cookies = getCookies()
-  const customerId = cookies.userId
+  const customerId = getCookie('customerId')
+
   const router = useRouter()
   useEffect(() => {
     if (!customerId) {

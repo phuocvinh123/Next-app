@@ -14,10 +14,10 @@ export const Header = () => {
   }, [])
 
   if (!isClient) return null
-  const userId = getCookie('userId')
+  const customerId = getCookie('customerId')
 
   const handleLogOut = () => {
-    deleteCookie('userId')
+    deleteCookie('customerId')
     toast.success('Log Out Successfully')
     window.location.href = '/'
   }
@@ -29,7 +29,7 @@ export const Header = () => {
             <Image src={Logo} alt='images' width={169} height={34} />
           </Link>
         </div>
-        {!userId ? (
+        {!customerId ? (
           <div className='lg:flex justify-center items-center text-center gap-[38px] ml-36 hidden font-medium text-lg leading-normal text-[#272D4E] not-italic cursor-pointer'>
             <div>Sell</div>
             <div>Marketplace</div>
@@ -38,7 +38,7 @@ export const Header = () => {
             <div>Resources</div>
           </div>
         ) : (
-          <div className='flex justify-center items-center ml-36 text-xl leading-normal text-[#272D4E] not-italic cursor-pointer gap-14 '>
+          <div className='lg:flex hidden justify-center items-center ml-36 text-xl leading-normal text-[#272D4E] not-italic cursor-pointer gap-14 '>
             <Link href={'/product'} className='hover:text-orange-500'>
               Product
             </Link>
@@ -52,7 +52,7 @@ export const Header = () => {
         )}
       </div>
       <div className='xl:flex items-center gap-[38px] hidden font-medium text-lg '>
-        {!userId ? (
+        {!customerId ? (
           <Link href={'/login'} className='text-[#272D4E] cursor-pointer'>
             Log In
           </Link>
@@ -74,7 +74,7 @@ export const Header = () => {
             />
           </svg>
         </div>
-        {!userId ? null : (
+        {!customerId ? null : (
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               <svg

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -19,6 +20,7 @@ public class ProductApi {
     @GetMapping
     public ResponseEntity<?> getAllProduct() {
         List<Product> products = productService.findAll();
+        Collections.reverse(products);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -36,6 +38,13 @@ public class ProductApi {
         } else {
             products = productService.findByCategory(category);
         }
+        Collections.reverse(products);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+        productService.deleteById(productId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
