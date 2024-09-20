@@ -6,6 +6,7 @@ interface Product {
   price: number
   image: string
   description: string
+  category: string
 }
 
 interface ProductState {

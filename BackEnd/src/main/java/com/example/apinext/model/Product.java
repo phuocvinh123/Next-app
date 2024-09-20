@@ -16,15 +16,11 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private Float price;
-
     private String category;
-
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
-
     private String Image;
 
 }

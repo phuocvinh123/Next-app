@@ -7,7 +7,8 @@ import { Provider } from 'react-redux'
 import store from '@/components/store/store'
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isAuthPage = pathname === '/login' || pathname === '/register'
+  const isAuthPage =
+    pathname === '/login' || pathname === '/register' || pathname === '/admin'
 
   return (
     <Provider store={store}>

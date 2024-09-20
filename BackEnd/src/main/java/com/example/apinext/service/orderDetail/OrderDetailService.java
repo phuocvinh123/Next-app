@@ -4,14 +4,17 @@ import com.example.apinext.model.Cart;
 import com.example.apinext.model.DTO.OrderDetailDTO;
 import com.example.apinext.model.Order;
 import com.example.apinext.model.OrderDetail;
+import com.example.apinext.model.SendEmail;
 import com.example.apinext.model.enums.EStatus;
+import com.example.apinext.model.enums.EStatusEmail;
 import com.example.apinext.repository.IOrderDetailRepository;
 import com.example.apinext.service.cart.CartService;
 import com.example.apinext.service.customer.CustomerService;
 import com.example.apinext.service.order.OrderService;
+import com.example.apinext.service.sendEmail.SendEmailService;
 import com.example.apinext.util.DateUtils;
 import com.example.apinext.util.EmailUtils;
-import com.example.apinext.util.SendEmail;
+import com.example.apinext.util.SentEmail;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class OrderDetailService implements IOrderDetailService{
     private CustomerService customerService;
     @Autowired
     private EmailUtils emailUtil;
+    @Autowired
+    private SendEmailService sendEmailService;
     @Override
     public List<OrderDetail> findAll() {
         return orderDetailRepository.findAll();
@@ -80,10 +85,11 @@ public class OrderDetailService implements IOrderDetailService{
             orderDetail.setOrder(idOrder);
             orderDetailRepository.save(orderDetail);
         }
-cartService.deleteAllByCustomer_Id(orderDetailDto.getCustomerId());
-        String Title = "Đơn hàng đã đặt thành công";
-        String Body = SendEmail.OrderSuccessful(order.getCustomer().getFullName(),order.getDate(),order.getTotalProduct(),order.getSubTotal());
-        emailUtil.sendEmail(order.getCustomer().getEmail(), Title, Body);
+    cartService.deleteAllByCustomer_Id(orderDetailDto.getCustomerId());
+        String title = "Đơn hàng đã đặt thành công";
+        String body = SentEmail.OrderSuccessful(order.getCustomer().getFullName(),order.getDate(),order.getTotalProduct(),order.getSubTotal());
+        SendEmail sendEmail = sendEmailService.saveEmail(order.getCustomer().getEmail(), title,body,order.getCustomer());
+        emailUtil.sendEmail(sendEmail);
         return idOrder;
     }
 }

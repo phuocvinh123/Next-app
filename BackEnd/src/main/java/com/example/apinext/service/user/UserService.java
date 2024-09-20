@@ -55,7 +55,6 @@ public class UserService implements IUserService {
     user.setPassword(PasswordEncryptionUtil.encryptPassword(registerDTO.getPassword()));
     user.setRole(ERole.USER);
     userRepository.save(user);
-
     User userId = userRepository.findById(String.valueOf(user.getId())).get();
     Customer customer = new Customer();
     customer.setUser(userId);

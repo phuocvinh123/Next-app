@@ -198,9 +198,12 @@ const BuyOrder = () => {
           text: 'There was an error placing your order.',
           icon: 'error',
         })
+        dispatch(fetchCustomerFailure('Error fetching data'))
       }
     }
   }
+
+  const isEmpty = (value: string | null) => value == null || value.trim() === ''
 
   useEffect(() => {
     setIsClient(true)
@@ -247,72 +250,141 @@ const BuyOrder = () => {
             Địa chỉ nhận hàng
           </div>
         </div>
-        {customers && (
-          <div className='flex gap-2 mt-10 font-normal text-xl items-center text-center ml-20'>
-            <div className='font-bold'>{customers.fullName}</div>
-            <div className='font-bold'>{customers.phone}</div>
-            <div className='text-base'>{customers.address}</div>
-            <div>
-              <div
-                className='text-sm text-[#4080ee] ml-2 cursor-pointer'
-                onClick={onOpen}
-              >
-                Thay đổi
-              </div>
-              <Modal
-                initialFocusRef={initialRef}
-                finalFocusRef={finalRef}
-                isOpen={isOpen}
-                onClose={onClose}
-              >
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>Địa chỉ mới</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody pb={6}>
-                    <FormControl>
-                      <FormLabel>fullName</FormLabel>
-                      <Input
-                        ref={initialRef}
-                        placeholder='fullName'
-                        onChange={(e) => setFullName(e.target.value)}
-                        value={fullName}
-                      />
-                    </FormControl>
-
-                    <FormControl mt={4}>
-                      <FormLabel>Phone</FormLabel>
-                      <Input
-                        placeholder='phone'
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </FormControl>
-
-                    <FormControl mt={4}>
-                      <FormLabel>Address</FormLabel>
-                      <Input
-                        placeholder='address'
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                    </FormControl>
-                  </ModalBody>
-
-                  <ModalFooter>
-                    <Button
-                      colorScheme='blue'
-                      mr={3}
-                      onClick={() => handleSave()}
-                    >
-                      Save
-                    </Button>
-                    <Button onClick={onClose}>Cancel</Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
+        {customers &&
+        (isEmpty(customers.fullName) ||
+          isEmpty(customers.phone) ||
+          isEmpty(customers.address)) ? (
+          <div className='flex justify-center items-center mt-10'>
+            <div className=' font-normal text-xl text-center'>
+              Xin nhập thông tin để đặt đơn hàng.
             </div>
+            <div
+              className='text-sm text-[#4080ee] ml-2 cursor-pointer text-center'
+              onClick={onOpen}
+            >
+              Tại đây
+            </div>
+            <Modal
+              initialFocusRef={initialRef}
+              finalFocusRef={finalRef}
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Địa chỉ mới</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <FormControl>
+                    <FormLabel>fullName</FormLabel>
+                    <Input
+                      ref={initialRef}
+                      placeholder='fullName'
+                      onChange={(e) => setFullName(e.target.value)}
+                      value={fullName}
+                    />
+                  </FormControl>
+
+                  <FormControl mt={4}>
+                    <FormLabel>Phone</FormLabel>
+                    <Input
+                      placeholder='phone'
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </FormControl>
+
+                  <FormControl mt={4}>
+                    <FormLabel>Address</FormLabel>
+                    <Input
+                      placeholder='address'
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </FormControl>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button
+                    colorScheme='blue'
+                    mr={3}
+                    onClick={() => handleSave()}
+                  >
+                    Save
+                  </Button>
+                  <Button onClick={onClose}>Cancel</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </div>
+        ) : (
+          customers && (
+            <div className='flex gap-2 mt-10 font-normal text-xl items-center text-center ml-20'>
+              <div className='font-bold'>{customers.fullName}</div>
+              <div className='font-bold'>{customers.phone}</div>
+              <div className='text-base'>{customers.address}</div>
+              <div>
+                <div
+                  className='text-sm text-[#4080ee] ml-2 cursor-pointer'
+                  onClick={onOpen}
+                >
+                  Thay đổi
+                </div>
+                <Modal
+                  initialFocusRef={initialRef}
+                  finalFocusRef={finalRef}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                >
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Địa chỉ mới</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                      <FormControl>
+                        <FormLabel>fullName</FormLabel>
+                        <Input
+                          ref={initialRef}
+                          placeholder='fullName'
+                          onChange={(e) => setFullName(e.target.value)}
+                          value={fullName}
+                        />
+                      </FormControl>
+
+                      <FormControl mt={4}>
+                        <FormLabel>Phone</FormLabel>
+                        <Input
+                          placeholder='phone'
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                        />
+                      </FormControl>
+
+                      <FormControl mt={4}>
+                        <FormLabel>Address</FormLabel>
+                        <Input
+                          placeholder='address'
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                        />
+                      </FormControl>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button
+                        colorScheme='blue'
+                        mr={3}
+                        onClick={() => handleSave()}
+                      >
+                        Save
+                      </Button>
+                      <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+              </div>
+            </div>
+          )
         )}
 
         <div className='mt-20 font-normal text-xl ml-20'>Sản phẩm</div>
@@ -370,15 +442,24 @@ const BuyOrder = () => {
             <Button className='w-56' onClick={() => handleBack()}>
               Back
             </Button>
-            {carts.length === 0 ? null : (
-              <Button
-                colorScheme='green'
-                className='w-56'
-                onClick={() => handleOrderNow()}
-              >
-                Order now
-              </Button>
-            )}
+            {customers &&
+              (isEmpty(customers.fullName) ||
+              isEmpty(customers.phone) ||
+              isEmpty(customers.address) ? (
+                <div className='font-normal text-xl text-center'>
+                  Xin nhập thông tin phía trên để tiếp tục đặt đơn hàng.
+                </div>
+              ) : (
+                carts.length > 0 && (
+                  <Button
+                    colorScheme='green'
+                    className='w-56'
+                    onClick={() => handleOrderNow()}
+                  >
+                    Order now
+                  </Button>
+                )
+              ))}
           </div>
         </div>
       </div>

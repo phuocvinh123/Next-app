@@ -44,8 +44,8 @@ const LoginForm = () => {
 
       setCookie('customerId', customer.id)
       setCookie('roleCustomer', customer.user.role)
-      toast.success('Login successful')
       router.push('/product')
+      toast.success('Login successful')
     } catch (err) {
       console.error('Error occurred:', err)
       dispatch(loginFailure('Something went wrong. Please try again.'))

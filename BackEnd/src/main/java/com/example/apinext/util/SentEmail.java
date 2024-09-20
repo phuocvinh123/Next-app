@@ -3,9 +3,10 @@ package com.example.apinext.util;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class SendEmail {
+public class SentEmail {
 
-    public static String OrderSuccessful(String name , LocalDate date,Integer totalProduct, BigDecimal Subtotal) {
+
+    public static String OrderSuccessful(String name , LocalDate date, Integer totalProduct, BigDecimal Subtotal) {
         return "Xin chào " + name + ",\n\n"
                 + "Cảm ơn bạn đã tin tưởng chọn và ủng hộ hệ thống của chúng tôi.\n"
                 + "Vào ngày " + date + " bạn đã đặt thành công đơn hàng của mình với " + totalProduct + " sản phẩm với tổng tiền là " + Subtotal +" $.\n"

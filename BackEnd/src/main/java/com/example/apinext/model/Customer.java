@@ -1,5 +1,6 @@
 package com.example.apinext.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,4 +29,7 @@ public class Customer {
     @OneToOne
     @JoinColumn(name="user_id")
     private User user;
+    @OneToMany(mappedBy = "customer")
+    @JsonIgnore
+    private List<SendEmail> sendEmail;
 }

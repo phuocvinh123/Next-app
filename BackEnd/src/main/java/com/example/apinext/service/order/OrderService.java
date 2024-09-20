@@ -3,6 +3,7 @@ package com.example.apinext.service.order;
 import com.example.apinext.model.Cart;
 import com.example.apinext.model.DTO.OrderDTO;
 import com.example.apinext.model.Order;
+import com.example.apinext.model.enums.EStatus;
 import com.example.apinext.repository.IOrderRepository;
 import com.example.apinext.service.cart.CartService;
 import com.example.apinext.util.DateUtils;
@@ -45,6 +46,8 @@ public class OrderService implements IOrderService{
         return orderRepository.findAllByCustomer_IdOrderByIdDesc(customer_id);
     }
 
-
-
+    @Override
+    public List<Order> findAllByStatus(EStatus status) {
+        return orderRepository.findAllByStatus(status);
+    }
 }
