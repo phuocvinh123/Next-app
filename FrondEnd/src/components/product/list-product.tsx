@@ -29,7 +29,6 @@ import {
   setSelectedCategory,
 } from '@/components/slice/product-slice'
 import { getCookie } from 'cookies-next'
-import { useRouter } from 'next/navigation'
 
 const ListProduct = () => {
   const dispatch = useDispatch()
@@ -37,13 +36,6 @@ const ListProduct = () => {
     (state: RootState) => state.product
   )
   const customerId = getCookie('customerId')
-  const router = useRouter()
-  useEffect(() => {
-    if (!customerId) {
-      toast.error('Please login to perform the next functions..')
-      router.push('/login')
-    }
-  }, [])
 
   useEffect(() => {
     const fetchProducts = async () => {

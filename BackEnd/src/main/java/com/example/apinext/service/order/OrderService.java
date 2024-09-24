@@ -22,9 +22,10 @@ public class OrderService implements IOrderService{
     @Autowired
     private CartService cartService;
     @Override
-    public List<Order> findAll() {
+    public List<Order>findAll() {
         return orderRepository.findAll();
     }
+
 
     @Override
     public Optional<Order> findById(Long id) {

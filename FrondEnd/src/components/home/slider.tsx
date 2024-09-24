@@ -56,8 +56,8 @@ export default function SimpleSlider() {
       </Slider>
 
       <button
-        className={`absolute -bottom-[120px] right-56 scale-150 ${
-          currentSlide === 0 ? 'opacity-30 scale-90' : 'opacity-100 scale-100'
+        className={`absolute -bottom-[120px] right-56 opacity-100 scale-150 ${
+          currentSlide === 0 ? 'opacity-30 scale-100' : 'opacity-100 scale-100'
         }`}
         onClick={() => sliderRef.current?.slickPrev()}
         disabled={currentSlide === 0}

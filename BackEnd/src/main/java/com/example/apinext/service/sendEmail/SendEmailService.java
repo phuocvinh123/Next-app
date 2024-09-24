@@ -6,6 +6,8 @@ import com.example.apinext.model.enums.EStatusEmail;
 import com.example.apinext.repository.ISendEmailRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,6 +62,16 @@ public class SendEmailService implements ISendEmailService{
 
     @Override
     public List<SendEmail> findAllByStatusEmail(EStatusEmail statusEmail) {
-        return sendEmailRepository.findAllByStatusEmail(statusEmail);
+        return sendEmailRepository.findAllByStatusEmail(statusEmail );
+    }
+
+    public Page<SendEmail> PageAllByStatusEmail(EStatusEmail statusEmail, Pageable pageable) {
+        return sendEmailRepository.findAllByStatusEmail(statusEmail , pageable);
+    }
+
+
+
+    public Page<SendEmail> findAllPage(Pageable pageable) {
+        return sendEmailRepository.findAll(pageable);
     }
 }

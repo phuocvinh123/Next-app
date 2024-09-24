@@ -18,7 +18,6 @@ import {
 } from '@/components/slice/cart-slice'
 import { Cart } from '@/components/interfaces/interface'
 import { useRouter } from 'next/navigation'
-import { toast } from 'react-toastify'
 
 const OrderList = () => {
   const [shouldFetchCart, setShouldFetchCart] = useState(false)
@@ -29,14 +28,7 @@ const OrderList = () => {
     error,
   } = useSelector((state: RootState) => state.cart)
   const customerId = getCookie('customerId')
-
   const router = useRouter()
-  useEffect(() => {
-    if (!customerId) {
-      toast.error('Please login to perform the next functions..')
-      router.push('/login')
-    }
-  }, [])
 
   useEffect(() => {
     const fetchCart = async () => {

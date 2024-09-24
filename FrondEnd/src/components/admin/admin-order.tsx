@@ -33,8 +33,6 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react'
-import { getCookie } from 'cookies-next'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -46,17 +44,9 @@ const AdminOrder = () => {
     selectedStatus,
     change,
   } = useSelector((state: RootState) => state.order)
-  const customerId = getCookie('customerId')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([])
   const [isClient, setIsClient] = useState(false)
-  const router = useRouter()
-  useEffect(() => {
-    if (!customerId) {
-      toast.error('Please login to perform the next functions..')
-      router.push('/login')
-    }
-  }, [])
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -77,7 +67,7 @@ const AdminOrder = () => {
       }
     }
     fetchOrder()
-  }, [dispatch, selectedStatus])
+  }, [dispatch, selectedStatus, change])
 
   const handleOpen = (orderId: number) => {
     fetchOrderDetails(orderId)
@@ -120,9 +110,8 @@ const AdminOrder = () => {
       status: status,
       orderId: orderId,
     }
-
     try {
-      const res = await fetch('http://localhost:9002/api/carts/addCart', {
+      const res = await fetch('http://localhost:9002/api/orders/changeStatus', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +123,8 @@ const AdminOrder = () => {
         throw new Error('Network response was not ok')
       }
       dispatch(setChange(!change))
-      toast.success('Thêm sản phẩm thành công')
+      toast.success('Thay đổi trạng thái thành công')
+      dispatch(setChange(!change))
     } catch (error) {
       console.error('Error:', error)
     }
@@ -147,7 +137,7 @@ const AdminOrder = () => {
   if (!isClient) return null
 
   return (
-    <div className='bg-white mr-12 p-4 w-[1440px]'>
+    <div className='bg-white mr-12 p-4 w-[1440px] mb-5'>
       <div className='mt-5 w-[250px]'>
         <Select
           placeholder='Tất cả'

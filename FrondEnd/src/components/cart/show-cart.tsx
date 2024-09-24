@@ -17,6 +17,7 @@ import {
   DrawerOverlay,
   Image,
   Text,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
 
@@ -167,12 +168,30 @@ const ShowCart = ({}) => {
                       </div>
                     </Box>
                     <div>
-                      <Text isTruncated maxW='150px' className='font-bold mt-4'>
-                        {cart.product.title}
-                      </Text>
-                      <Text isTruncated maxW='150px' className=' mt-4'>
-                        {cart.product.description}
-                      </Text>
+                      <Tooltip
+                        label={cart.product.title}
+                        aria-label='A tooltip'
+                      >
+                        <Text
+                          isTruncated
+                          maxW='150px'
+                          className='font-bold mt-4 cursor-pointer'
+                        >
+                          {cart.product.title}
+                        </Text>
+                      </Tooltip>
+                      <Tooltip
+                        label={cart.product.description}
+                        aria-label='A tooltip'
+                      >
+                        <Text
+                          isTruncated
+                          maxW='150px'
+                          className='mt-4 cursor-pointer'
+                        >
+                          {cart.product.description}
+                        </Text>
+                      </Tooltip>
                       <div className='flex gap-5 mt-4 bg-[#F6F6F6] justify-center items-center p-2 w-[125px] h-[40px]'>
                         <Button
                           onClick={() =>

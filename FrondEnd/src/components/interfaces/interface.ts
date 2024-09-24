@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jwt-decode'
+
 export interface User {
   id: number
   username: string
@@ -47,6 +49,16 @@ export interface Customer {
   address: string
   user: User
 }
+
+export interface SendEmail {
+  id: number
+  body: string
+  statusEmail: string
+  subject: string
+  toEmail: string
+  retryCount: number
+  customer: Customer
+}
 export interface ListCategoryProps {
   selectedCategory: string
   setSelectedCategory: (category: string) => void
@@ -54,4 +66,9 @@ export interface ListCategoryProps {
 
 export interface ShowCartProps {
   addToCart: (productId: number) => Promise<void>
+}
+
+export interface CustomJwtPayload extends JwtPayload {
+  customerId: number
+  role: string
 }

@@ -11,6 +11,10 @@ import com.example.apinext.service.sendEmail.SendEmailService;
 import com.example.apinext.util.EmailUtils;
 import com.example.apinext.util.SentEmail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +72,7 @@ public class OrderApi {
         List<SendEmail> email = sendEmailService.findAllByStatusEmail(EStatusEmail.waiting);
         return new ResponseEntity<>(email,HttpStatus.OK);
     }
+
 
     @PostMapping("/changeStatus")
     public ResponseEntity<?> changeStatus(@RequestBody ChangeStatusDTO changeStatusDTO) {

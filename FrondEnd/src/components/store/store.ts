@@ -3,9 +3,12 @@ import cartReducer from '@/components/slice/cart-slice'
 import userReducer from '@/components/slice/user-slice'
 import customerReducer from '@/components/slice/customer-slice'
 import orderReducer from '@/components/slice/order-slice'
+import papaginationReducer from '@/components/slice/page-slice'
 import { configureStore } from '@reduxjs/toolkit'
+import createSagaMiddleware from 'redux-saga'
+import rootSaga from '@/components/saga/root-saga'
 
-export type RootState = ReturnType<typeof store.getState>
+const sagaMiddleware = createSagaMiddleware()
 const store = configureStore({
   reducer: {
     product: productReducer,
@@ -13,8 +16,14 @@ const store = configureStore({
     user: userReducer,
     customer: customerReducer,
     order: orderReducer,
+    pagination: papaginationReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 })
 
+sagaMiddleware.run(rootSaga)
+
 export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
 export default store

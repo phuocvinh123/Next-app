@@ -4,6 +4,8 @@ import com.example.apinext.model.Product;
 import com.example.apinext.repository.IProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,5 +38,8 @@ public class ProductService implements IProductService{
     @Override
     public List<Product> findByCategory(String category) {
         return productRepository.findByCategory(String.valueOf(category));
+    }
+    public Page<Product> PageAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 }

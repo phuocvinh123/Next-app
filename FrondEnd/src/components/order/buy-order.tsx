@@ -65,13 +65,6 @@ const BuyOrder = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if (!customerId) {
-      toast.error('Please login to perform the next functions..')
-      router.push('/login')
-    }
-  }, [])
-
-  useEffect(() => {
     const fetchCustomer = async () => {
       dispatch(fetchCustomerStart())
       try {

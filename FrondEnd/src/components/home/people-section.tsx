@@ -29,7 +29,7 @@ export const PeopleSection = () => {
                   cy='21.5'
                   r='19'
                   stroke='#FFBA49'
-                  stroke-width='5'
+                  strokeWflood-opacityidth='5'
                 />
               </svg>
             </div>
@@ -47,7 +47,7 @@ export const PeopleSection = () => {
                   r='28.0887'
                   transform='rotate(16.0891 30.8674 30.8677)'
                   stroke='#FFBA49'
-                  stroke-width='5'
+                  strokeWidth='5'
                 />
               </svg>
             </div>
@@ -64,7 +64,7 @@ export const PeopleSection = () => {
                   cy='17'
                   r='14.5'
                   stroke='#FFBA49'
-                  stroke-width='5'
+                  strokeWidth='5'
                 />
               </svg>
             </div>
@@ -91,9 +91,9 @@ export const PeopleSection = () => {
                   width='1543.71'
                   height='378.707'
                   filterUnits='userSpaceOnUse'
-                  color-interpolation-filters='sRGB'
+                  colorInterpolationFilters='sRGB'
                 >
-                  <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                  <feFlood floodOpacity='0' result='BackgroundImageFix' />
                   <feColorMatrix
                     in='SourceAlpha'
                     type='matrix'

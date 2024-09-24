@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 
@@ -38,11 +39,18 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
+import PageGination from '@/components/pagegination/pages'
+import {
+  fetchItemsSuccess,
+  setCurrentPage,
+  setPageSize,
+} from '@/components/slice/page-slice'
+import { Product } from '@/components/interfaces/interface'
 
 const schema = yup.object().shape({
   title: yup.string().required('Tên không được để trống'),
@@ -59,6 +67,7 @@ const AdminProduct = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   })
@@ -66,43 +75,77 @@ const AdminProduct = () => {
   const { products, loading, error, change } = useSelector(
     (state: RootState) => state.product
   )
+  const { currentPage, pageSize, totalItems } = useSelector(
+    (state: RootState) => state.pagination
+  )
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [isClient, setIsClient] = useState(false)
   useEffect(() => {
     const fetchData = async () => {
       dispatch(fetchProductsStart())
       try {
-        const res = await axios.get('http://localhost:9002/api/products')
+        const res = await axios.get(
+          `http://localhost:9002/api/products?page=${
+            currentPage - 1
+          }&size=${pageSize}`
+        )
         const data = res.data
-        dispatch(fetchProductsSuccess(data))
+        dispatch(
+          fetchItemsSuccess({
+            totalItems: data.totalElements,
+          })
+        )
+        dispatch(fetchProductsSuccess(data.content))
       } catch (error) {
         console.error('Error fetching products:', error)
       }
     }
 
     fetchData()
-  }, [dispatch, change])
+  }, [dispatch, change, currentPage, pageSize])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const createProduct = async (data: any) => {
+  const createOrUpdateProduct = async (data: any) => {
     dispatch(fetchProductsStart())
     try {
-      const res = await axios.post(
-        'http://localhost:9002/api/products/create',
-        data
-      )
-      if (res.status === 200) {
-        toast.success('Tạo sản phẩm thành công')
-        dispatch(setChange(!change))
-        reset()
-        onClose()
-        dispatch(fetchProductsEnd())
+      if (editingProduct) {
+        const res = await axios.put(
+          `http://localhost:9002/api/products/edit/${editingProduct.id}`,
+          data
+        )
+        if (res.status === 200) {
+          toast.success('Cập nhật sản phẩm thành công')
+        }
       } else {
-        throw new Error('Product creation failed')
+        const res = await axios.post(
+          'http://localhost:9002/api/products/create',
+          data
+        )
+        if (res.status === 200) {
+          toast.success('Tạo sản phẩm thành công')
+        }
       }
+      setEditingProduct(null)
+      dispatch(setChange(!change))
+      reset()
+      onClose()
+      dispatch(fetchProductsEnd())
     } catch (error) {
-      toast.error('Tạo sản phẩm thất bại!')
-      console.error('Error creating product:', error)
+      toast.error('Có lỗi xảy ra!')
+      console.error('Error:', error)
       dispatch(fetchProductsEnd())
     }
+  }
+
+  const openEditModal = (product: any) => {
+    setEditingProduct(product)
+    reset()
+    setValue('title', product.title)
+    setValue('description', product.description)
+    setValue('price', product.price)
+    setValue('image', product.image)
+    setValue('category', product.category)
+    onOpen()
   }
 
   const handleDeleteProduct = async (productId: number) => {
@@ -135,6 +178,13 @@ const AdminProduct = () => {
       }
     })
   }
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) return null
+
   return (
     <>
       {loading && (
@@ -151,17 +201,25 @@ const AdminProduct = () => {
       <div className='bg-white mr-12 p-4 w-[1440px]'>
         <div>
           <TableContainer>
-            <Button onClick={onOpen} colorScheme='green' className='my-5'>
+            <Button
+              onClick={() => {
+                onOpen(), reset(), setEditingProduct(null)
+              }}
+              colorScheme='green'
+              className='my-5'
+            >
               Add Product
             </Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Product Information</ModalHeader>
+                <ModalHeader>
+                  {editingProduct ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm'}
+                </ModalHeader>
                 <ModalCloseButton />
 
-                <form onSubmit={handleSubmit(createProduct)}>
+                <form onSubmit={handleSubmit(createOrUpdateProduct)}>
                   <ModalBody>
                     <FormControl isInvalid={Boolean(errors.title)}>
                       <FormLabel>Title</FormLabel>
@@ -211,7 +269,7 @@ const AdminProduct = () => {
                       Close
                     </Button>
                     <Button type='submit' variant='ghost'>
-                      Submit
+                      {editingProduct ? 'Cập nhật' : 'Thêm'}
                     </Button>
                   </ModalFooter>
                 </form>
@@ -259,7 +317,12 @@ const AdminProduct = () => {
                       <Td>{p.category}</Td>
                       <Td isNumeric>{p.price} $</Td>
                       <Td textAlign='center'>
-                        <Button colorScheme='yellow'>Edit</Button>
+                        <Button
+                          colorScheme='yellow'
+                          onClick={() => openEditModal(p)}
+                        >
+                          Edit
+                        </Button>
                         <Button
                           ml={10}
                           colorScheme='red'
@@ -273,6 +336,17 @@ const AdminProduct = () => {
               </Tbody>
             </Table>
           </TableContainer>
+        </div>
+        <div>
+          <div className='mt-12 flex justify-end mr-5'>
+            <PageGination
+              currentPage={currentPage}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              setPage={(page) => dispatch(setCurrentPage(page))}
+              setPageSize={(size) => dispatch(setPageSize(size))}
+            />
+          </div>
         </div>
       </div>
     </>

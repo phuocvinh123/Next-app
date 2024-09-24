@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Spinner } from '@chakra-ui/react'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
@@ -10,21 +10,34 @@ import { setCookie } from 'cookies-next'
 import {
   loginFailure,
   loginStart,
+  loginSuccess,
   setEmail,
   setPassword,
 } from '@/components/slice/user-slice'
+import { FormEvent, useEffect } from 'react'
 
 /* eslint-disable react/no-unescaped-entities */
 const LoginForm = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const err = searchParams.get('error')
+  useEffect(() => {
+    if (err === 'no-access') {
+      toast.error('Insufficient access, please log in with another account.')
+    }
+    if (err === 'session-expired') {
+      toast.error('Không thể tạo mới được token')
+    }
+  }, [err])
   const { email, password, loading, error } = useSelector(
     (state: RootState) => state.user
   )
 
-  const handleLogin = async (e: { preventDefault: () => void }) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(loginStart())
+
     try {
       const response = await fetch('http://localhost:9002/api/user/login', {
         method: 'POST',
@@ -35,20 +48,27 @@ const LoginForm = () => {
           username: email,
           password: password,
         }),
+        referrerPolicy: 'no-referrer',
       })
-      const customer = await response.json()
 
       if (!response.ok) {
-        throw new Error(customer.message || 'Login failed')
+        const errorResponse = await response.json()
+        throw new Error(errorResponse.message || 'Login failed')
       }
 
+      const { accessToken, refreshToken, customer } = await response.json()
+
+      setCookie('accessToken', accessToken, { maxAge: 60 * 2 })
+      setCookie('refreshToken', refreshToken, { maxAge: 60 * 15 })
       setCookie('customerId', customer.id)
-      setCookie('roleCustomer', customer.user.role)
-      router.push('/product')
+      dispatch(loginSuccess(customer))
+      router.push(customer.user.role === 'USER' ? '/product' : '/admin')
       toast.success('Login successful')
     } catch (err) {
       console.error('Error occurred:', err)
+      toast.error('Error occurred:' + err)
       dispatch(loginFailure('Something went wrong. Please try again.'))
+    } finally {
     }
   }
 
@@ -105,7 +125,11 @@ const LoginForm = () => {
           </div>
         </div>
         {error && <div className='text-red-500 mt-4'>{error}</div>}
-        <form onSubmit={handleLogin} method='POST' className='flex flex-col'>
+        <form
+          onSubmit={(e) => handleLogin(e)}
+          method='POST'
+          className='flex flex-col'
+        >
           <input
             className='w-[300px] px-12 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5'
             type='text'

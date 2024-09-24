@@ -10,23 +10,12 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { getCookie } from 'cookies-next'
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
-
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 const OrderSuccess = () => {
   const { id } = useParams()
-  const customerId = getCookie('customerId')
-  const router = useRouter()
-  useEffect(() => {
-    if (!customerId) {
-      toast.error('Please login to perform the next functions..')
-      router.push('/login')
-    }
-  }, [customerId, router])
 
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([])
   useEffect(() => {

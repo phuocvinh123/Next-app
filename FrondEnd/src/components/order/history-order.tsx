@@ -35,8 +35,6 @@ import {
 import { getCookie } from 'cookies-next'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
 
 const HistoryOrder = () => {
   const dispatch = useDispatch()
@@ -45,13 +43,6 @@ const HistoryOrder = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([])
   const [isClient, setIsClient] = useState(false)
-  const router = useRouter()
-  useEffect(() => {
-    if (!customerId) {
-      toast.error('Please login to perform the next functions..')
-      router.push('/login')
-    }
-  }, [])
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -142,6 +133,7 @@ const HistoryOrder = () => {
                       colorScheme={
                         statusColors[order.status as OrderStatus] || 'gray'
                       }
+                      w={100}
                     >
                       {order.status}
                     </Button>

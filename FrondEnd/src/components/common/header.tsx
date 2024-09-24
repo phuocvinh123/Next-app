@@ -18,6 +18,8 @@ export const Header = () => {
 
   const handleLogOut = () => {
     deleteCookie('customerId')
+    deleteCookie('accessToken')
+    deleteCookie('refreshToken')
     toast.success('Log Out Successfully')
     window.location.href = '/'
   }
