@@ -6,6 +6,16 @@ export interface User {
   password: string
 }
 
+export interface Discount {
+  id: number
+  percentDecrease: string
+  favourite: boolean
+  reduce: string
+  cheapChampion: boolean
+  sold: string
+  images: string
+}
+
 export interface Product {
   id: number
   title: string
@@ -13,6 +23,7 @@ export interface Product {
   category: string
   description: string
   image: string
+  discount: Discount
 }
 
 export interface Cart {

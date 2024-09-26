@@ -22,6 +22,7 @@
     "jose": "^5.9.3",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
+    "lightgallery": "^2.7.2",
     "next": "^14.2.11",
     "next-auth": "^4.24.7",
     "react": "^18",
@@ -35,7 +36,7 @@
     "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.6.13",
-    "swiper": "^11.1.12",
+    "swiper": "^11.1.14",
     "universal-cookie": "^7.2.0",
     "yup": "^1.4.0"
   },

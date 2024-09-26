@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { toast } from 'react-toastify'
-import { deleteCookie, getCookie } from 'cookies-next'
+import { getCookie } from 'cookies-next'
 import { useEffect, useState } from 'react'
+import { DeleteAllTokens } from '@/components/cookies/token'
 export const Header = () => {
   const [isClient, setIsClient] = useState(false)
 
@@ -15,11 +16,8 @@ export const Header = () => {
 
   if (!isClient) return null
   const customerId = getCookie('customerId')
-
   const handleLogOut = () => {
-    deleteCookie('customerId')
-    deleteCookie('accessToken')
-    deleteCookie('refreshToken')
+    DeleteAllTokens()
     toast.success('Log Out Successfully')
     window.location.href = '/'
   }

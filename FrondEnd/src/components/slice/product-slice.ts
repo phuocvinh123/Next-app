@@ -1,13 +1,5 @@
+import { Product } from '@/components/interfaces/interface'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-interface Product {
-  id: number
-  title: string
-  price: number
-  image: string
-  description: string
-  category: string
-}
 
 interface ProductState {
   products: Product[]

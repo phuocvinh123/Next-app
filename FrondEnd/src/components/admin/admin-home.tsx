@@ -4,6 +4,7 @@ import AdminOrder from '@/components/admin/admin-order'
 import AdminProduct from '@/components/admin/admin-product'
 import AdminSendEmail from '@/components/admin/admin-send-email'
 import Dashboard from '@/components/admin/dashboard'
+import { DeleteAllTokens } from '@/components/cookies/token'
 import {
   Avatar,
   Menu,
@@ -13,7 +14,6 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
-import { deleteCookie } from 'cookies-next'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -37,9 +37,7 @@ const AdminHome = () => {
   }
 
   const handleLogOut = () => {
-    deleteCookie('customerId')
-    deleteCookie('accessToken')
-    deleteCookie('refreshToken')
+    DeleteAllTokens()
     window.location.href = '/'
     toast.success('Log Out Successfully')
   }

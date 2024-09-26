@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/components/store/store'
-import { setCookie } from 'cookies-next'
 import {
   loginFailure,
   loginStart,
@@ -15,6 +14,7 @@ import {
   setPassword,
 } from '@/components/slice/user-slice'
 import { FormEvent, useEffect } from 'react'
+import { DeleteAllTokens, SetCookieAll } from '@/components/cookies/token'
 
 /* eslint-disable react/no-unescaped-entities */
 const LoginForm = () => {
@@ -24,9 +24,11 @@ const LoginForm = () => {
   const err = searchParams.get('error')
   useEffect(() => {
     if (err === 'no-access') {
+      DeleteAllTokens()
       toast.error('Insufficient access, please log in with another account.')
     }
     if (err === 'session-expired') {
+      DeleteAllTokens()
       toast.error('Không thể tạo mới được token')
     }
   }, [err])
@@ -58,14 +60,11 @@ const LoginForm = () => {
 
       const { accessToken, refreshToken, customer } = await response.json()
 
-      setCookie('accessToken', accessToken, { maxAge: 60 * 2 })
-      setCookie('refreshToken', refreshToken, { maxAge: 60 * 15 })
-      setCookie('customerId', customer.id)
+      SetCookieAll(accessToken, refreshToken, customer)
       dispatch(loginSuccess(customer))
       router.push(customer.user.role === 'USER' ? '/product' : '/admin')
       toast.success('Login successful')
     } catch (err) {
-      console.error('Error occurred:', err)
       toast.error('Error occurred:' + err)
       dispatch(loginFailure('Something went wrong. Please try again.'))
     } finally {
@@ -144,6 +143,7 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => dispatch(setPassword(e.target.value))}
           />
+
           <button
             type='submit'
             className='mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none'
