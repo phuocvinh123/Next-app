@@ -54,8 +54,6 @@ body {
   text-align: center;
   font-size: 18px;
   background: #fff;
-
-  /* Center slide text vertically */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,6 +83,9 @@ body {
   width: 450px;
   height: 450px;
 }
+.mySwiper3 {
+  height: 616px;
+}
 
 .mySwiper {
   height: 20%;
@@ -105,6 +106,11 @@ body {
 }
 
 .mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+  border: 2px solid #ee4d2d;
+}
+
+.mySwiper .swiper-slide-thumb-active:hover {
   opacity: 1;
   border: 2px solid #ee4d2d;
 }

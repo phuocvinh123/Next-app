@@ -8,7 +8,17 @@ const nextConfig = {
         pathname: '/demos/images/**',
       },
     ],
-    domains: ['down-vn.img.susercontent.com', 'deo.shopeemobile.com'],
+    domains: [
+      'down-vn.img.susercontent.com',
+      'deo.shopeemobile.com',
+      'th.bing.com',
+      'img.freepik.com',
+      'png.pngtree.com',
+      'down-my.img.susercontent.com',
+      'honestlyfit.com',
+      'image.made-in-china.com',
+      'www.thetiip.com',
+    ],
   },
 }
 

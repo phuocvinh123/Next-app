@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import {
   Breadcrumb,
@@ -21,20 +22,26 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
+import 'swiper/swiper-bundle.css'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
 import Image from 'next/image'
 import { Swiper as SwiperType } from 'swiper/types'
+import { Images } from '@/components/interfaces/interface'
 
 const ProductDetailComponent = () => {
   const { productId } = useParams()
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
-  const [currentImage, setCurrentImage] = useState('')
+  const [images, setImages] = useState<Images[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const swiperRef = useRef<any>(null)
+  const thumbsSwiperRef = useRef<any>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const {
     isOpen: isOpenSize,
     onOpen: onOpenSize,
@@ -46,6 +53,25 @@ const ProductDetailComponent = () => {
     onClose: onCloseImages,
   } = useDisclosure()
   const [quantity, setQuantity] = useState(1)
+  const [selectdeSize, setSelectedSize] = useState<number | null>(null)
+
+  useEffect(() => {
+    const fetchProductsDetail = async () => {
+      try {
+        const url = `http://localhost:9002/api/products/images/${productId}`
+        const response = await fetch(url)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const data = await response.json()
+        setImages(data)
+      } catch (err) {
+        console.log('Something went wrong. Please try again.')
+      }
+    }
+
+    fetchProductsDetail()
+  }, [productId])
 
   const handleMinus = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1))
@@ -60,16 +86,16 @@ const ProductDetailComponent = () => {
     setQuantity(value)
   }
 
-  const images = Array.from(
-    { length: 5 },
-    (_, index) => `https://swiperjs.com/demos/images/nature-${index + 1}.jpg`
-  )
-  const openImageModal = (image: React.SetStateAction<string>) => {
-    setCurrentImage(image)
+  // const images = Array.from(
+  //   { length: 5 },
+  //   (_, index) => `https://swiperjs.com/demos/images/nature-${index + 1}.jpg`
+  // )
+  const openImageModal = (index: number) => {
+    console.log(index + 1)
+
+    setCurrentIndex(index + 1)
     onOpenImages()
   }
-
-  console.log(productId)
 
   return (
     <div className='mx-auto container py-10'>
@@ -78,26 +104,32 @@ const ProductDetailComponent = () => {
           <BreadcrumbLink href='/'>Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href='#'>Breadcrumb</BreadcrumbLink>
+          <BreadcrumbLink href='#'>
+            {' '}
+            {images.length > 0 ? images[0].product.title : 'Sản phẩm không có'}
+          </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
       <div className='mt-5 p-5 flex gap-20'>
         <div className='w-[550px]'>
           <Swiper
+            ref={thumbsSwiperRef}
             loop={true}
             spaceBetween={10}
+            watchSlidesProgress={true}
             thumbs={{ swiper: thumbsSwiper }}
             modules={[FreeMode, Navigation, Thumbs]}
+            onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
             className='mySwiper2'
           >
             {images.map((image, index) => (
               <SwiperSlide
-                key={index}
+                key={image.id}
                 className='h-[450px]'
-                onClick={() => openImageModal(image)}
+                onClick={() => openImageModal(index)}
               >
                 <Image
-                  src={image}
+                  src={image.url}
                   alt='images'
                   width={450}
                   height={450}
@@ -105,15 +137,87 @@ const ProductDetailComponent = () => {
                 />
               </SwiperSlide>
             ))}
-
-            <Modal isOpen={isOpenImages} onClose={onCloseImages} size='6xl'>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalCloseButton />
-                <ModalBody>aaaaaaaaa</ModalBody>
-              </ModalContent>
-            </Modal>
           </Swiper>
+          <Modal isOpen={isOpenImages} onClose={onCloseImages} size='5xl'>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalBody display='flex' flexDirection='column'>
+                <div className='flex gap-5'>
+                  <div className='w-[616px] h-[616px]'>
+                    <Swiper
+                      ref={swiperRef}
+                      style={
+                        {
+                          '--swiper-navigation-color': '#fff',
+                          '--swiper-pagination-color': '#fff',
+                        } as React.CSSProperties
+                      }
+                      initialSlide={currentIndex - 1}
+                      slidesPerView={1}
+                      spaceBetween={10}
+                      loop={true}
+                      navigation={true}
+                      watchSlidesProgress={true}
+                      modules={[FreeMode, Navigation, Thumbs]}
+                      onSlideChange={(swiper) => {
+                        setCurrentIndex(swiper.activeIndex + 1)
+                      }}
+                      className='mySwiper3'
+                    >
+                      {images.map((image) => (
+                        <SwiperSlide key={image.id}>
+                          <Image
+                            src={image.url}
+                            alt='Current'
+                            width={516}
+                            height={516}
+                            objectFit='cover'
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </div>
+                  <div>
+                    <div className='line-clamp-2 text-2xl font-medium mt-8'>
+                      {images.length > 0
+                        ? images[0].product.title
+                        : 'Không có tên sản ph'}
+                    </div>
+                    <div className='flex gap-2 flex-wrap mt-5'>
+                      {images.map((image) => (
+                        <div
+                          key={image.id}
+                          className={`w-[100px] h-[100px] border-2 ${
+                            currentIndex === image.id
+                              ? 'border-red-500'
+                              : 'border-transparent'
+                          }`}
+                        >
+                          <Image
+                            src={image.url}
+                            alt='image'
+                            width={100}
+                            height={120}
+                            onClick={() => {
+                              if (
+                                swiperRef.current &&
+                                swiperRef.current.swiper
+                              ) {
+                                swiperRef.current.swiper.slideTo(image.id - 1)
+                              }
+                              setCurrentIndex(image.id)
+                            }}
+                            className='cursor-pointer'
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+
           <Swiper
             style={
               {
@@ -131,16 +235,21 @@ const ProductDetailComponent = () => {
             modules={[FreeMode, Navigation, Thumbs]}
             className='mySwiper mt-5'
           >
-            {Array.from({ length: 10 }, (_, index) => (
-              <SwiperSlide key={index}>
-                <Image
-                  alt='images'
-                  src={`https://swiperjs.com/demos/images/nature-${
-                    index + 1
-                  }.jpg`}
-                  width={82}
-                  height={82}
-                />
+            {images.map((image, index) => (
+              <SwiperSlide
+                key={image.id}
+                onClick={() => openImageModal(index)}
+                onMouseEnter={() => {
+                  if (
+                    thumbsSwiperRef.current &&
+                    thumbsSwiperRef.current.swiper
+                  ) {
+                    thumbsSwiperRef.current.swiper.slideToLoop(index)
+                  }
+                  setCurrentIndex(index)
+                }}
+              >
+                <Image alt='images' src={image.url} width={82} height={82} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -233,24 +342,28 @@ const ProductDetailComponent = () => {
                   <path
                     d='M19.469 1.262c-5.284-1.53-7.47 4.142-7.47 4.142S9.815-.269 4.532 1.262C-1.937 3.138.44 13.832 12 19.333c11.559-5.501 13.938-16.195 7.469-18.07z'
                     stroke='#FF424F'
-                    stroke-width='1.5'
+                    strokeWidth='1.5'
                     fill='none'
                     fillRule='evenodd'
                     strokeLinejoin='round'
                   ></path>
                 </svg>
               </div>
+
               <div className='text-xl font-normal'>Đã thích (5,2K)</div>
             </div>
           </div>
         </div>
         <div>
-          <div className='h-20 inline-block overflow-hidden text-ellipsis text-3xl font-semibold '>
+          <div className='h-20 w-[850px] flex items-center overflow-hidden text-ellipsis line-clamp-2 text-3xl font-normal '>
             <span className='text-white bg-[#EE4D2D] rounded-sm px-1 mr-2 text-lg'>
               Yêu thích
             </span>
-            Áo thun FAFIC mascot Jersey Ngắn Tay 11 Jersey vải mè lưới xịn mặc
-            thoáng mát FAFIC STUDIO
+            <span>
+              {images.length > 0
+                ? images[0].product.title
+                : 'Sản phẩm không có'}
+            </span>
           </div>
           <div className='flex justify-between'>
             <div className='flex'>
@@ -373,7 +486,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -391,7 +504,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -408,7 +521,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -426,7 +539,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -443,7 +556,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -461,7 +574,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -478,7 +591,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -496,7 +609,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -513,7 +626,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -531,7 +644,7 @@ const ProductDetailComponent = () => {
                       >
                         <path
                           d='M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3'
-                          stroke-width='1'
+                          strokeWidth='1'
                           transform=''
                           stroke='#fbebed'
                           fill='#fbebed'
@@ -609,7 +722,9 @@ const ProductDetailComponent = () => {
                 Mới
               </div>
             </div>
-            <div className='text-xl text-[#08f]'>Tìm hiểu thêm</div>
+            <div className='text-xl text-[#08f] cursor-default'>
+              Tìm hiểu thêm
+            </div>
           </div>
           <div className='mt-6 flex gap-5'>
             <div className='text-xl text-[#757575] w-[110px] font-normal '>
@@ -626,7 +741,7 @@ const ProductDetailComponent = () => {
                 <div className='font-medium'>Miễn phí vận chuyển</div>
               </div>
               <div className='mt-4 flex gap-5'>
-                <div>
+                <div className='mt-2'>
                   <Image
                     src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/baa823ac1c58392c2031.svg'
                     alt='image'
@@ -693,20 +808,59 @@ const ProductDetailComponent = () => {
             <div className='text-xl mt-2 text-[#757575] w-[110px] font-normal'>
               Màu sắc
             </div>
-            <div className='w-full ml-4 h-[230px] flex flex-wrap gap-5 overflow-y-auto'>
-              {Array.from({ length: 15 }, (_, index) => (
-                <div
-                  key={index}
-                  className='flex gap-2 border-[1px] p-2 border-solid border-[rgba(0,0,0,0.09)]'
+            <div className='w-full ml-4 h-[230px] flex flex-wrap gap-5 overflow-y-auto '>
+              {images.map((image, index) => (
+                <button
+                  key={image.id}
+                  className={`relative flex items-center gap-2 border-[1px] p-2 border-solid 
+   ${
+     selectedIndex === index ? 'border-[#ee4d2d] !important text-[#ee4d2d]' : ''
+   }
+      hover:border-[#ee4d2d] hover:text-[#ee4d2d] cursor-pointer`}
+                  onClick={() => {
+                    if (
+                      thumbsSwiperRef.current &&
+                      thumbsSwiperRef.current.swiper
+                    ) {
+                      thumbsSwiperRef.current.swiper.slideToLoop(index)
+                    }
+                    setSelectedIndex(index)
+                    setCurrentIndex(index)
+                  }}
+                  onMouseEnter={() => {
+                    if (
+                      thumbsSwiperRef.current &&
+                      thumbsSwiperRef.current.swiper
+                    ) {
+                      thumbsSwiperRef.current.swiper.slideToLoop(index)
+                    }
+                    setCurrentIndex(index)
+                  }}
                 >
-                  <Image
-                    src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lxhtpisismaj9a@resize_w24_nl.webp'
-                    alt='image'
-                    width={20}
-                    height={20}
-                  ></Image>
-                  <div className='text-xl'>SỐ 11 RAPPER WHITE</div>
-                </div>
+                  <Image src={image.url} alt='image' width={20} height={20} />
+                  <div className='text-xl'>{image.color.nameColor}</div>
+                  <div
+                    className={`${
+                      selectedIndex === index ? '' : 'hidden'
+                    } absolute bottom-0 right-0`}
+                  >
+                    <div className=' w-0 h-0 border-l-[17px] border-l-transparent border-b-[17px] border-b-[#ee4d2d] flex justify-end items-end'></div>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth='3'
+                      stroke='white'
+                      className='size-3 absolute top-1 right-0'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='m4.5 12.75 6 6 9-13.5'
+                      />
+                    </svg>
+                  </div>
+                </button>
               ))}
             </div>
           </div>
@@ -716,15 +870,44 @@ const ProductDetailComponent = () => {
             </div>
             <div>
               <div className='flex gap-2'>
-                <div className='text-xl px-5 py-2 border-[rgba(0,0,0,0.09)] border-[1px]'>
-                  Size M
-                </div>
-                <div className='text-xl px-5 py-2 border-[rgba(0,0,0,0.09)] border-[1px]'>
-                  Size L
-                </div>
-                <div className='text-xl px-5 py-2 border-[rgba(0,0,0,0.09)] border-[1px]'>
-                  Size XL
-                </div>
+                {images.length > 0 && images[0].size ? (
+                  images[0].size.map((size, index) => (
+                    <div
+                      key={size.id}
+                      className={`relative text-xl px-5 py-2  ${
+                        selectdeSize === index
+                          ? 'border-[#ee4d2d] text-[#ee4d2d]'
+                          : ''
+                      }  border-[1px] hover:border-[1px] hover:border-[#ee4d2d] hover:text-[#ee4d2d] cursor-pointer`}
+                      onClick={() => setSelectedSize(index)}
+                    >
+                      Size {size.sizeName}
+                      <div
+                        className={`${
+                          selectdeSize === index ? '' : 'hidden'
+                        } absolute bottom-0 right-0`}
+                      >
+                        <div className=' w-0 h-0 border-l-[17px] border-l-transparent border-b-[17px] border-b-[#ee4d2d] flex justify-end items-end'></div>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth='3'
+                          stroke='white'
+                          className='size-3 absolute top-1 right-0'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='m4.5 12.75 6 6 9-13.5'
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div>Không có kích thước nào để hiển thị.</div>
+                )}
               </div>
               <div
                 className='flex mt-6 text-xl items-center cursor-pointer'

@@ -1,6 +1,10 @@
 package com.example.apinext.controller.api;
 
+import com.example.apinext.model.DTO.ImageDTO;
+import com.example.apinext.model.Images;
 import com.example.apinext.model.Product;
+import com.example.apinext.service.images.IImagesService;
+import com.example.apinext.service.images.ImagesService;
 import com.example.apinext.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,13 +24,23 @@ import java.util.List;
 public class ProductApi {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ImagesService imagesService;
 
     @GetMapping
-    public ResponseEntity<?> getAllProduct( @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<?> getAllProduct(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Product> products = productService.PageAll(pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/images/{productId}")
+    public ResponseEntity<?> getAllImagesByProductId(@PathVariable Long productId) {
+//        List<Images> images = imagesService.findAllByProduct_Id(productId);
+//        return new ResponseEntity<>(images, HttpStatus.OK);
+        List<ImageDTO> imageDTOS = imagesService.findAllImagesBySize(productId);
+        return new ResponseEntity<>(imageDTOS, HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -44,13 +58,14 @@ public class ProductApi {
         updateProduct.setDescription(product.getDescription());
         updateProduct.setImage((product.getImage()));
         productService.save(updateProduct);
-        return new ResponseEntity<>(updateProduct,HttpStatus.OK);
+        return new ResponseEntity<>(updateProduct, HttpStatus.OK);
     }
 
     @GetMapping({"/", "/{category}"})
     public ResponseEntity<?> getProductsByCategory(@PathVariable(required = false) String category) {
         List<Product> products;
         if (category == null || category.isEmpty()) {
+
             products = productService.findAll();
         } else {
             products = productService.findByCategory(category);
@@ -58,10 +73,16 @@ public class ProductApi {
         Collections.reverse(products);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
     @DeleteMapping("/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
         productService.deleteById(productId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/find/{productId}")
+    public ResponseEntity<?> searchProduct(@PathVariable Long productId) {
+        List<ImageDTO> imageDTOS = imagesService.findAllImagesBySize(productId);
+        return new ResponseEntity<>(imageDTOS, HttpStatus.OK);
+    }
 }

@@ -15,6 +15,24 @@ export interface Discount {
   sold: string
   images: string
 }
+export interface Images {
+  id: number
+  url: string
+  product: Product
+  color: Color
+  size: Size[]
+}
+
+export interface Size {
+  id: number
+  sizeName: string
+}
+
+export interface Color {
+  id: number
+  nameColor: string
+  status: boolean
+}
 
 export interface Product {
   id: number

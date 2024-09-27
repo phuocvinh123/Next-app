@@ -1,10 +1,13 @@
 package com.example.apinext.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -25,5 +28,11 @@ public class Product {
     @OneToOne
     @JoinColumn(name="discount_id")
     private Discount discount;
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    List<Images> imagesList;
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    List<Size> sizeList;
 
 }
