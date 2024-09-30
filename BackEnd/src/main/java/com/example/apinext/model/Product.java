@@ -28,11 +28,7 @@ public class Product {
     @OneToOne
     @JoinColumn(name="discount_id")
     private Discount discount;
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonIgnore
-    List<Images> imagesList;
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    List<Size> sizeList;
-
+    private List<Variant> variants;
 }

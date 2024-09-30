@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Table(name = "images")
 @Getter
@@ -18,9 +19,9 @@ public class Images {
     private Long id;
     private String url;
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @JoinColumn(name = "variant_id", referencedColumnName = "id")
+    private Variant variant;
     @OneToOne
-    @JoinColumn(name="color_id")
-    private Color color;
+    @JoinColumn(name="stock_id")
+    private Stock stock;
 }

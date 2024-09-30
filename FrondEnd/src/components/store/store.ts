@@ -4,6 +4,7 @@ import userReducer from '@/components/slice/user-slice'
 import customerReducer from '@/components/slice/customer-slice'
 import orderReducer from '@/components/slice/order-slice'
 import papaginationReducer from '@/components/slice/page-slice'
+import variantReducer from '@/components/slice/variant-slice'
 import { configureStore } from '@reduxjs/toolkit'
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from '@/components/saga/root-saga'
@@ -17,6 +18,7 @@ const store = configureStore({
     customer: customerReducer,
     order: orderReducer,
     pagination: papaginationReducer,
+    variant: variantReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

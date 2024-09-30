@@ -1,6 +1,5 @@
 package com.example.apinext.model.DTO;
 
-import com.example.apinext.model.Stock;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageDTO {
+public class ImageSizeDTO {
     private Long id;
-    private String url;
-    private Stock stock;
+    private Long imageId;
+    private String sizeName;
 }

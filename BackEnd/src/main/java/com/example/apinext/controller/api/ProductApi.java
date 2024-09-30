@@ -1,8 +1,10 @@
 package com.example.apinext.controller.api;
 
 import com.example.apinext.model.DTO.ImageDTO;
+import com.example.apinext.model.DTO.VariantDTO;
 import com.example.apinext.model.Images;
 import com.example.apinext.model.Product;
+import com.example.apinext.service.Variant.VariantService;
 import com.example.apinext.service.images.IImagesService;
 import com.example.apinext.service.images.ImagesService;
 import com.example.apinext.service.product.ProductService;
@@ -26,6 +28,8 @@ public class ProductApi {
     private ProductService productService;
     @Autowired
     private ImagesService imagesService;
+    @Autowired
+    private VariantService variantsService;
 
     @GetMapping
     public ResponseEntity<?> getAllProduct(@RequestParam(defaultValue = "0") int page,
@@ -37,10 +41,8 @@ public class ProductApi {
 
     @GetMapping("/images/{productId}")
     public ResponseEntity<?> getAllImagesByProductId(@PathVariable Long productId) {
-//        List<Images> images = imagesService.findAllByProduct_Id(productId);
-//        return new ResponseEntity<>(images, HttpStatus.OK);
-        List<ImageDTO> imageDTOS = imagesService.findAllImagesBySize(productId);
-        return new ResponseEntity<>(imageDTOS, HttpStatus.OK);
+        List<VariantDTO> variants = variantsService.getAll(productId);
+        return new ResponseEntity<>(variants, HttpStatus.OK);
     }
 
     @PostMapping("/create")

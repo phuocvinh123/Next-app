@@ -10,19 +10,25 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "colors")
+@Table(name = "variants")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Color {
+public class Variant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nameColor;
-    private boolean status;
-    @OneToMany(mappedBy = "color")
-    @JsonIgnore
-    private List<Variant> variants;
-}
 
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "color_id", referencedColumnName = "id")
+    private Color color;
+
+    @OneToMany(mappedBy = "variant")
+    @JsonIgnore
+    private List<Images> images;
+}

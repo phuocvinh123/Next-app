@@ -1,5 +1,5 @@
 import { JwtPayload } from 'jwt-decode'
-
+import { SwiperRef } from 'swiper/react'
 export interface User {
   id: number
   username: string
@@ -25,6 +25,35 @@ export interface Images {
 
 export interface Size {
   id: number
+  sizeName: string
+}
+
+export interface Variant {
+  id: number
+  product: Product
+  color: Color
+}
+
+export interface VariantData {
+  variant: Variant
+  images: Image[]
+  imageSizes: ImageSize[]
+}
+
+export interface Image {
+  id: number
+  url: string
+  stock: Stock
+}
+
+export interface Stock {
+  id: number
+  quantity: number
+}
+
+export interface ImageSize {
+  id: number
+  imageId: number
   sizeName: string
 }
 
@@ -100,4 +129,11 @@ export interface ShowCartProps {
 export interface CustomJwtPayload extends JwtPayload {
   customerId: number
   role: string
+}
+
+export interface ProductSwiperProps {
+  variantDto: VariantData[]
+  currentIndex: number
+  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>
+  thumbsSwiperRef: React.RefObject<SwiperRef>
 }

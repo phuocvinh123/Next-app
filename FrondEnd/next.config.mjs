@@ -18,6 +18,7 @@ const nextConfig = {
       'honestlyfit.com',
       'image.made-in-china.com',
       'www.thetiip.com',
+      'images.remotePatterns',
     ],
   },
 }

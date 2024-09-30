@@ -1,10 +1,13 @@
 package com.example.apinext.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "sizes")
@@ -17,7 +20,8 @@ public class Size {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String sizeName;
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+
+    @OneToMany(mappedBy = "size")
+    @JsonIgnore
+    private List<ImageSize> imageSizes;
 }

@@ -1,28 +1,27 @@
 package com.example.apinext.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
-@Table(name = "colors")
+@Table(name = "imageSizes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Color {
+public class ImageSize {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nameColor;
-    private boolean status;
-    @OneToMany(mappedBy = "color")
-    @JsonIgnore
-    private List<Variant> variants;
-}
 
+    @ManyToOne
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Images image;
+
+    @ManyToOne
+    @JoinColumn(name = "size_id", referencedColumnName = "id")
+    private Size size;
+}
