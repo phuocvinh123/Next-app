@@ -26,6 +26,13 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id",nullable = false)
     private Product product;
+    @ManyToOne
+    @JoinColumn(name="color_id", referencedColumnName = "id",nullable = false)
+    private Color color;
+    private String size;
+    @ManyToOne
+    @JoinColumn(name="image_id", referencedColumnName = "id",nullable = false)
+    private Images image;
     private Integer quantity;
     private BigDecimal totalPrice;
 }

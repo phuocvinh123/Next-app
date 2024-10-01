@@ -89,7 +89,7 @@ const OrderSuccess = () => {
                     objectFit='cover'
                     width={40}
                     height={40}
-                    src={od.product.image}
+                    src={od.image.url}
                     alt={od.product.title}
                   />
 
@@ -97,14 +97,17 @@ const OrderSuccess = () => {
                     <CardBody>
                       <Heading size='md'>{od.product.title}</Heading>
                       <Text isTruncated maxW={450} py='2'>
-                        {od.product.description}
+                        Mẫu: {od.color.nameColor}
+                      </Text>
+                      <Text isTruncated maxW={450} py='2'>
+                        Size {od.size}
                       </Text>
                       <div className='flex gap-4'>
                         <Text py='2'>
                           <strong>Quantity:</strong> {od.quantity}
                         </Text>
                         <Text py='2'>
-                          <strong>Price:</strong> {od.totalPrice} $
+                          <strong>Price:</strong> {od.totalPrice.toFixed(3)} $
                         </Text>
                       </div>
                     </CardBody>
@@ -117,7 +120,7 @@ const OrderSuccess = () => {
               {orderDetails &&
                 orderDetails.length > 0 &&
                 orderDetails[0].order &&
-                orderDetails[0].order.subTotal}{' '}
+                orderDetails[0].order.subTotal.toFixed(3)}
               $
             </div>
           </div>

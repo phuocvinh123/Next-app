@@ -139,7 +139,7 @@ const HistoryOrder = () => {
                     </Button>
                   </Td>
                   <Td textAlign='center'>{order.totalProduct}</Td>
-                  <Td isNumeric>{order.subTotal} $</Td>
+                  <Td isNumeric>{order.subTotal.toFixed(3)} $</Td>
                   <Td>
                     <Button onClick={() => handleOpen(order.id)}>
                       Chi tiết
@@ -192,7 +192,7 @@ const HistoryOrder = () => {
                   <div className='flex items-center ml-2 '>
                     <Image
                       objectFit='cover'
-                      src={detail.product.image}
+                      src={detail.image?.url}
                       alt={detail.product.title}
                     />
                   </div>
@@ -201,14 +201,18 @@ const HistoryOrder = () => {
                     <CardBody>
                       <Heading size='md'>{detail.product.title}</Heading>
                       <Text isTruncated maxW={300} py='2'>
-                        {detail.product.description}
+                        Mẫu: {detail.color?.nameColor}
+                      </Text>
+                      <Text isTruncated maxW={300} py='2'>
+                        Size {detail?.size}
                       </Text>
                       <div className='flex justify-between'>
                         <Text py='2'>
                           <strong>Quantity:</strong> {detail.quantity}
                         </Text>
                         <Text py='2'>
-                          <strong>Price:</strong> {detail.totalPrice} $
+                          <strong>Price:</strong> {detail.totalPrice.toFixed(3)}{' '}
+                          $
                         </Text>
                       </div>
                     </CardBody>

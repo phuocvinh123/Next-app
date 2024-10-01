@@ -1,10 +1,11 @@
 package com.example.apinext.service.cart;
-import com.example.apinext.model.Cart;
-import com.example.apinext.model.Customer;
+import com.example.apinext.model.*;
+import com.example.apinext.model.DTO.AddCart;
 import com.example.apinext.model.DTO.CartDTO;
-import com.example.apinext.model.Product;
 import com.example.apinext.repository.ICartRepository;
+import com.example.apinext.service.color.ColorService;
 import com.example.apinext.service.customer.CustomerService;
+import com.example.apinext.service.images.ImagesService;
 import com.example.apinext.service.product.ProductService;
 import com.example.apinext.util.DateUtils;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,11 @@ public class CartService implements ICartService{
     private CustomerService customerService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ColorService colorService;
+    @Autowired
+    private ImagesService imagesService;
+
     @Override
     public List<Cart> findAll() {
         return cartRepository.findAll();
@@ -74,5 +80,32 @@ public class CartService implements ICartService{
         return cartRepository.deleteAllByCustomer_Id(customer_id);
     }
 
+    public Cart addToCart(AddCart addCart){
+        Customer customer = customerService.findById(addCart.getCustomerId()).get();
+        Product product = productService.findById(addCart.getProductId()).get();
+        Color color = colorService.findById(addCart.getColor()).get();
+        Images images =imagesService.findById(addCart.getColor()).get();
+        Cart existingCart = cartRepository.findByCustomerAndProduct(customer, product);
+        if (existingCart != null) {
+            if((existingCart.getQuantity() + addCart.getQuantity()) > existingCart.getImage().getStock().getQuantity()){
+               return null;
+            }
+            else{
+                existingCart.setQuantity(existingCart.getQuantity() + addCart.getQuantity());
+                cartRepository.save(existingCart);
+                return existingCart;
+            }
+        }
+            Cart cart = new Cart();
+            cart.setCustomer(customer);
+            cart.setDate(DateUtils.convertStringToLocalDate(addCart.getDate()));
+            cart.setProduct(product);
+            cart.setQuantity(addCart.getQuantity());
+            cart.setColor(color);
+            cart.setSize(addCart.getSize());
+            cart.setImage(images);
+            cartRepository.save(cart);
+            return cart;
+        }
 
 }

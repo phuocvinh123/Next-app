@@ -117,8 +117,8 @@ const BuyOrder = () => {
   }
 
   const totalPrice = carts
-    .reduce((acc, cart) => acc + cart.product.price * cart.quantity, 0)
-    .toFixed(2)
+    .reduce((acc, cart) => acc + cart.image.price * cart.quantity, 0)
+    .toFixed(3)
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -169,6 +169,7 @@ const BuyOrder = () => {
             headers: {
               'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(orderData),
           }
         )
@@ -389,6 +390,8 @@ const BuyOrder = () => {
                   <Th textAlign='center'>Image</Th>
                   <Th>Title</Th>
                   <Th>Description</Th>
+                  <Th textAlign='center'>Color</Th>
+                  <Th textAlign='center'> Size</Th>
                   <Th textAlign='center'>Quantity</Th>
                   <Th isNumeric>Total Price</Th>
                 </Tr>
@@ -404,22 +407,24 @@ const BuyOrder = () => {
                     <Tr key={cart.id}>
                       <Td className='flex justify-center'>
                         <Image
-                          src={cart.product.image}
+                          src={cart.image.url}
                           alt='images'
                           width={40}
                           height={40}
                         />
                       </Td>
                       <Td isTruncated maxW={350}>
-                        {' '}
                         {cart.product.title}
                       </Td>
                       <Td isTruncated maxW={350}>
-                        {' '}
                         {cart.product.description}
                       </Td>
+                      <Td textAlign='center'>{cart.color.nameColor}</Td>
+                      <Td textAlign='center'>{cart.size}</Td>
                       <Td textAlign='center'>{cart.quantity}</Td>
-                      <Td isNumeric>{cart.product.price * cart.quantity} $</Td>
+                      <Td isNumeric>
+                        {(cart.image.price * cart.quantity).toFixed(3)} $
+                      </Td>
                     </Tr>
                   ))
                 )}

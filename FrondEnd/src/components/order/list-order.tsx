@@ -57,8 +57,8 @@ const OrderList = () => {
   }
 
   const totalPrice = carts
-    .reduce((acc, cart) => acc + cart.product.price * cart.quantity, 0)
-    .toFixed(2)
+    .reduce((acc, cart) => acc + cart.image.price * cart.quantity, 0)
+    .toFixed(3)
 
   return (
     <>
@@ -101,18 +101,21 @@ const OrderList = () => {
                 </div>
                 <Box maxW='120px' maxH='5px'>
                   <Image
-                    src={cart.product.image}
+                    src={cart.image.url}
                     alt='images'
                     width={60}
                     height={40}
                   />
                 </Box>
-                <div className='flex flex-col mt-10'>
+                <div className='flex flex-col mt-2'>
                   <Text isTruncated maxW='450px' className='font-bold mt-4'>
                     {cart.product.title}
                   </Text>
                   <Text isTruncated maxW='450px' className=' mt-4'>
-                    {cart.product.description}
+                    {cart.color.nameColor}
+                  </Text>
+                  <Text isTruncated maxW='450px' className=' mt-4'>
+                    Size {cart.size}
                   </Text>
                 </div>
                 <div className='flex gap-5 mt-16 bg-[#F6F6F6] justify-center items-center p-2 w-[125px] h-[40px]'>
@@ -155,7 +158,7 @@ const OrderList = () => {
                   </Button>
                 </div>
                 <Text isTruncated maxW='450px' className=' mt-[70px]'>
-                  {cart.product.price * cart.quantity} $
+                  {(cart.image.price * cart.quantity).toFixed(3)} $
                 </Text>
               </div>
             ))

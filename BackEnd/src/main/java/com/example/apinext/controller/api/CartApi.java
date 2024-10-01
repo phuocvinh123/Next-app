@@ -1,10 +1,9 @@
 package com.example.apinext.controller.api;
 
 import com.example.apinext.model.Cart;
+import com.example.apinext.model.DTO.AddCart;
 import com.example.apinext.model.DTO.CartDTO;
-import com.example.apinext.model.Product;
 import com.example.apinext.service.cart.CartService;
-import com.example.apinext.service.cart.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +54,11 @@ public class CartApi {
     public ResponseEntity<?> deleteCartById(@PathVariable Long cartId) {
         cartService.deleteById(cartId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/addToCart")
+    public ResponseEntity<?> addToCart(@RequestBody AddCart addCart){
+        Cart addToCart =cartService.addToCart(addCart);
+        return new ResponseEntity<>(addToCart, HttpStatus.OK);
     }
 }

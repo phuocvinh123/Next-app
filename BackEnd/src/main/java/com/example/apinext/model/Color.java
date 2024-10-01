@@ -20,7 +20,6 @@ public class Color {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nameColor;
-    private boolean status;
     @OneToMany(mappedBy = "color")
     @JsonIgnore
     private List<Variant> variants;

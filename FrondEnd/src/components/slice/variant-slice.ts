@@ -1,10 +1,11 @@
 import { VariantData } from '@/components/interfaces/interface'
+import { fetchProductDetailSuccess } from '@/components/saga/variant-saga'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface VariantState {
   variantDto: VariantData[]
-  currentIndex: number
-  selectedIndex: number
+  currentIndex: number | null
+  selectedIndex: number | null
   quantity: number
   selectedSize: number | null
   size: string
@@ -15,8 +16,8 @@ interface VariantState {
 
 const initialState: VariantState = {
   variantDto: [],
-  currentIndex: 0,
-  selectedIndex: 0,
+  currentIndex: null,
+  selectedIndex: null,
   quantity: 1,
   selectedSize: null,
   size: '',
@@ -63,6 +64,13 @@ const VariantSlice = createSlice({
     setColor(state, action: PayloadAction<string>) {
       state.color = action.payload
     },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(fetchProductDetailSuccess, (state, action) => {
+      state.loading = false
+      state.variantDto = action.payload
+    })
   },
 })
 

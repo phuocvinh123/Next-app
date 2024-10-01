@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Cart } from '@/components/interfaces/interface'
 import {
   fetchCartFailure,
@@ -65,8 +66,8 @@ const ShowCart = ({}) => {
   }
 
   const totalPrice = carts
-    .reduce((acc, cart) => acc + cart.product.price * cart.quantity, 0)
-    .toFixed(2)
+    .reduce((acc, cart) => acc + cart.image.price * cart.quantity, 0)
+    .toFixed(3)
 
   return (
     <>
@@ -134,7 +135,7 @@ const ShowCart = ({}) => {
           <DrawerBody>
             <div className='flex flex-col gap-4'>
               {carts.length > 0 &&
-                carts.map((cart) => (
+                carts.map((cart: any) => (
                   <div className='flex gap-2 relative' key={cart.id}>
                     <div
                       className='absolute top-0 -left-4 cursor-pointer hover:bg-red-600 hover:rounded-full'
@@ -160,7 +161,7 @@ const ShowCart = ({}) => {
                     <Box maxW='120px' maxH='5px'>
                       <div className='flex items-center'>
                         <Image
-                          src={cart.product.image}
+                          src={cart.image.url}
                           alt='images'
                           width={60}
                           height={40}
@@ -181,7 +182,7 @@ const ShowCart = ({}) => {
                         </Text>
                       </Tooltip>
                       <Tooltip
-                        label={cart.product.description}
+                        label={cart.color.nameColor}
                         aria-label='A tooltip'
                       >
                         <Text
@@ -189,7 +190,7 @@ const ShowCart = ({}) => {
                           maxW='150px'
                           className='mt-4 cursor-pointer'
                         >
-                          {cart.product.description}
+                          {cart.color.nameColor}
                         </Text>
                       </Tooltip>
                       <div className='flex gap-5 mt-4 bg-[#F6F6F6] justify-center items-center p-2 w-[125px] h-[40px]'>
@@ -238,7 +239,7 @@ const ShowCart = ({}) => {
                       <div className='flex gap-5 mt-4'>
                         <div className='font-bold'>Price:</div>
                         <Text isTruncated maxW='150px'>
-                          {cart.product.price * cart.quantity} $
+                          {(cart.image.price * cart.quantity).toFixed(3)} $
                         </Text>
                       </div>
                     </div>

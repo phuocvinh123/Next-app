@@ -72,7 +72,7 @@ public class VariantService implements IVariantService{
             List<Images> images = imagesService.getAllImageByVariantId(variant.getId());
 
             List<ImageDTO> simpleImages = images.stream()
-                    .map(image -> new ImageDTO(image.getId(),image.getUrl(),image.getStock()))
+                    .map(image -> new ImageDTO(image.getId(),image.getUrl(),image.getStock(),image.getPrice()))
                     .collect(Collectors.toList());
             variantDTO.setImages(simpleImages);
 

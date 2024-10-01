@@ -24,4 +24,6 @@ public class Images {
     @OneToOne
     @JoinColumn(name="stock_id")
     private Stock stock;
+
+    private float price;
 }

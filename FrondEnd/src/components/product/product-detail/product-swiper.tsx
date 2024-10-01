@@ -81,7 +81,7 @@ const ProductSwiper: React.FC<ProductSwiperProps> = ({
                       '--swiper-pagination-color': '#fff',
                     } as React.CSSProperties
                   }
-                  initialSlide={currentIndex - 1}
+                  initialSlide={currentIndex ? currentIndex - 1 : 0}
                   slidesPerView={1}
                   spaceBetween={10}
                   loop={true}

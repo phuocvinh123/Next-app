@@ -15,13 +15,13 @@ export interface Discount {
   sold: string
   images: string
 }
-export interface Images {
-  id: number
-  url: string
-  product: Product
-  color: Color
-  size: Size[]
-}
+// export interface Images {
+//   id: number
+//   url: string
+//   product: Product
+//   color: Color
+//   size: Size[]
+// }
 
 export interface Size {
   id: number
@@ -44,6 +44,7 @@ export interface Image {
   id: number
   url: string
   stock: Stock
+  price: number
 }
 
 export interface Stock {
@@ -79,6 +80,9 @@ export interface Cart {
   date: string
   product: Product
   quantity: number
+  color: Color
+  size: string
+  image: Image
 }
 
 export interface Order {
@@ -96,6 +100,9 @@ export interface OrderDetail {
   product: Product
   quantity: number
   totalPrice: number
+  color: Color
+  size: string
+  image: Image
 }
 
 export interface Customer {
@@ -133,7 +140,7 @@ export interface CustomJwtPayload extends JwtPayload {
 
 export interface ProductSwiperProps {
   variantDto: VariantData[]
-  currentIndex: number
+  currentIndex: number | null
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>
   thumbsSwiperRef: React.RefObject<SwiperRef>
 }

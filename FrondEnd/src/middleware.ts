@@ -107,7 +107,8 @@ export async function middleware(req: NextRequest) {
     req.nextUrl.pathname.startsWith('/buy-order') ||
     req.nextUrl.pathname.startsWith('/history-order') ||
     req.nextUrl.pathname.startsWith('/order-now') ||
-    req.nextUrl.pathname.startsWith('/order-success')
+    req.nextUrl.pathname.startsWith('/order-success') ||
+    req.nextUrl.pathname.startsWith('/product-detail')
   ) {
     return res
   }
@@ -124,5 +125,6 @@ export const config = {
     '/order-now/:path*',
     '/order-success/:path*',
     '/api/:path*',
+    '/product-detail/:path*',
   ],
 }

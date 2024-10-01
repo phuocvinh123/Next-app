@@ -15,6 +15,7 @@ import {
 } from '@/components/slice/user-slice'
 import { FormEvent, useEffect } from 'react'
 import { DeleteAllTokens, SetCookieAll } from '@/components/cookies/token'
+import React from 'react'
 
 /* eslint-disable react/no-unescaped-entities */
 const LoginForm = () => {
@@ -50,6 +51,7 @@ const LoginForm = () => {
           username: email,
           password: password,
         }),
+        credentials: 'include',
         referrerPolicy: 'no-referrer',
       })
 
