@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -27,6 +28,7 @@ import {
   Tbody,
   Td,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
@@ -35,14 +37,49 @@ import {
 import { getCookie } from 'cookies-next'
 
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const HistoryOrder = () => {
   const dispatch = useDispatch()
   const { items: orders } = useSelector((state: RootState) => state.order)
   const customerId = getCookie('customerId')
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isOpenDetail,
+    onOpen: onOpenDetail,
+    onClose: onCloseDetail,
+  } = useDisclosure()
+
+  const {
+    isOpen: isOpenRating,
+    onOpen: onOpenRating,
+    onClose: onCloseRating,
+  } = useDisclosure()
+
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([])
   const [isClient, setIsClient] = useState(false)
+  const [star, setStar] = useState(5)
+  const [comment, setComment] = useState('')
+
+  const handleRatingChange = (event: any) => {
+    setStar(Number(event.target.value))
+  }
+
+  const getRatingText = (rating: any) => {
+    switch (rating) {
+      case 1:
+        return 'Tệ'
+      case 2:
+        return 'Không hài lòng'
+      case 3:
+        return 'Bình thường'
+      case 4:
+        return 'Hài lòng'
+      case 5:
+        return 'Tuyệt vời'
+      default:
+        return ''
+    }
+  }
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -64,7 +101,12 @@ const HistoryOrder = () => {
 
   const handleOpen = (orderId: number) => {
     fetchOrderDetails(orderId)
-    onOpen()
+    onOpenDetail()
+  }
+
+  const handleOpenRating = (orderId: number) => {
+    fetchOrderDetails(orderId)
+    onOpenRating()
   }
 
   const fetchOrderDetails = async (orderId: number) => {
@@ -94,6 +136,33 @@ const HistoryOrder = () => {
     [OrderStatus.CANCEL]: 'red',
   }
 
+  const handleRating = async (productId: number, orderId: number) => {
+    const data = {
+      productId,
+      customerId,
+      orderId,
+      date: new Date().toISOString(),
+      star,
+      comment,
+    }
+    try {
+      const response = await fetch('http://localhost:9002/api/ratings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      if (!response.ok) {
+        throw new Error('Failed to fetch order details')
+      }
+      onCloseRating()
+      toast.success('Đánh giá sản phẩm thành công')
+    } catch (error) {
+      console.error('Error fetching order details:', error)
+    }
+  }
+
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -106,13 +175,13 @@ const HistoryOrder = () => {
         <Table variant='simple'>
           <Thead>
             <Tr>
-              <Th>#</Th>
+              <Th textAlign='center'>#</Th>
               <Th textAlign='center'>Full Name</Th>
               <Th>Date Order</Th>
               <Th textAlign='center'>Status</Th>
               <Th textAlign='center'>Total Product</Th>
               <Th isNumeric>Sub Total</Th>
-              <Th>Xem chi tiết</Th>
+              <Th textAlign='center'>Xem chi tiết</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -140,10 +209,19 @@ const HistoryOrder = () => {
                   </Td>
                   <Td textAlign='center'>{order.totalProduct}</Td>
                   <Td isNumeric>{order.subTotal.toFixed(3)} $</Td>
-                  <Td>
+                  <Td className='flex gap-4 items-center justify-center'>
                     <Button onClick={() => handleOpen(order.id)}>
                       Chi tiết
                     </Button>
+                    {order.statusRating === false &&
+                      order.status === 'PAID' && (
+                        <Button
+                          colorScheme='red'
+                          onClick={() => handleOpenRating(order.id)}
+                        >
+                          Đánh giá
+                        </Button>
+                      )}
                   </Td>
                 </Tr>
               ))
@@ -152,7 +230,7 @@ const HistoryOrder = () => {
         </Table>
       </TableContainer>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpenDetail} onClose={onCloseDetail}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Information</ModalHeader>
@@ -206,7 +284,7 @@ const HistoryOrder = () => {
                       <Text isTruncated maxW={300} py='2'>
                         Size {detail?.size}
                       </Text>
-                      <div className='flex justify-between'>
+                      <div className='flex justify-between flex-wrap'>
                         <Text py='2'>
                           <strong>Quantity:</strong> {detail.quantity}
                         </Text>
@@ -223,8 +301,108 @@ const HistoryOrder = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='blue' mr={3} onClick={onCloseDetail}>
               Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal onClose={onCloseRating} isOpen={isOpenRating} size='4xl'>
+        <ModalOverlay />
+        <ModalContent>
+          <Text className='text-2xl ml-8 mt-8 '>Đánh giá sản phẩm</Text>
+          <div className='mt-12 mx-8'>
+            {orderDetails.map((od) => (
+              <div className='flex gap-4 mb-5' key={od.id}>
+                <Image
+                  src={od.image.url}
+                  alt='images'
+                  className='object-cover w-20'
+                ></Image>
+                <div>
+                  <div className='text-xl font-medium'>{od.product.title}</div>
+                  <div className='flex gap-1'>
+                    <div>
+                      Phân loại hàng: {od.color.nameColor}, {od.size}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className='mt-8 text-xl flex gap-16 items-center'>
+              <div>Chất lượng sản phẩm</div>
+              <div className='flex gap-4'>
+                <div className='rating'>
+                  <input
+                    type='radio'
+                    name='rating-2'
+                    value='1'
+                    className='mask mask-star-2 bg-orange-400'
+                    onChange={(e) => handleRatingChange(e)}
+                  />
+                  <input
+                    type='radio'
+                    name='rating-2'
+                    value='2'
+                    className='mask mask-star-2 bg-orange-400'
+                    onChange={(e) => handleRatingChange(e)}
+                  />
+                  <input
+                    type='radio'
+                    name='rating-2'
+                    value='3'
+                    className='mask mask-star-2 bg-orange-400'
+                    onChange={(e) => handleRatingChange(e)}
+                  />
+                  <input
+                    type='radio'
+                    name='rating-2'
+                    value='4'
+                    className='mask mask-star-2 bg-orange-400'
+                    onChange={(e) => handleRatingChange(e)}
+                  />
+                  <input
+                    type='radio'
+                    name='rating-2'
+                    value='5'
+                    className='mask mask-star-2 bg-orange-400'
+                    onChange={(e) => handleRatingChange(e)}
+                    defaultChecked
+                  />
+                </div>
+                <div>{getRatingText(star)}</div>
+              </div>
+            </div>
+            <div className='mt-4 bg-[#f5f5f5] p-5'>
+              <div className='bg-white border px-5 py-3'>
+                <div>
+                  <Textarea
+                    placeholder='Hãy chia sẻ những điều bạn thích về sản phẩm này với những người mua khác nhé.'
+                    size='sm'
+                    onChange={(e) => setComment(e.target.value)}
+                  ></Textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ModalFooter>
+            <Button onClick={onCloseRating} className='mr-5'>
+              Trở lại
+            </Button>
+            <Button
+              className='mr-2'
+              colorScheme='red'
+              onClick={() =>
+                handleRating(
+                  orderDetails[0].product.id,
+                  orderDetails[0].order.id
+                )
+              }
+            >
+              Hoàn Thành
             </Button>
           </ModalFooter>
         </ModalContent>

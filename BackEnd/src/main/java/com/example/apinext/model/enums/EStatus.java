@@ -5,5 +5,4 @@ public enum EStatus {
     INTRANSIT,
     PAID,
     CANCEL
-
 }

@@ -1,6 +1,7 @@
 package com.example.apinext.controller.api;
 
 import com.example.apinext.model.DTO.ChangeStatusDTO;
+import com.example.apinext.model.DTO.OrderResDTO;
 import com.example.apinext.model.Order;
 import com.example.apinext.model.Product;
 import com.example.apinext.model.SendEmail;
@@ -11,6 +12,7 @@ import com.example.apinext.service.sendEmail.SendEmailService;
 import com.example.apinext.util.EmailUtils;
 import com.example.apinext.util.SentEmail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class OrderApi {
     @Autowired
+    @Lazy
     private OrderService orderService;
     @Autowired
     private EmailUtils emailUtil;

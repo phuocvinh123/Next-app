@@ -1,6 +1,6 @@
 package com.example.apinext.model;
 
-import com.example.apinext.model.enums.EStatus;
+import com.example.apinext.model.enums.ERating;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,29 +8,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "ratings")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer star;
+    private String comment;
+    private String createAt;
+    private String repComment;
     @ManyToOne
     private Customer customer;
-    private LocalDate date;
-    private Integer totalProduct;
-    private BigDecimal subTotal;
-    @Enumerated(EnumType.STRING)
-    private EStatus status;
-    @OneToMany(mappedBy = "order")
+    @ManyToOne
+    private Product product;
+    @OneToMany(mappedBy = "rating")
     @JsonIgnore
-    List<OrderDetail> orderDetails;
-    private boolean statusRating = false;
+    private List<ImageRating> imageRating;
+    @Enumerated(EnumType.STRING)
+    private ERating eRating;
 }

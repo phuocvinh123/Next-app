@@ -47,6 +47,7 @@ import {
   addToCartAPI,
   fetchProductDetailRequest,
 } from '@/components/saga/variant-saga'
+import RatingComponent from '@/components/product/product-detail/rating'
 
 const ProductDetailComponent = () => {
   const { productId } = useParams()
@@ -139,7 +140,12 @@ const ProductDetailComponent = () => {
   }
 
   const handleAddProduct = async () => {
-    if (selectedIndex != null && selectedSize != null) {
+    if (
+      selectedIndex != null &&
+      selectedSize != null &&
+      selectedIndex > -1 &&
+      selectedSize > -1
+    ) {
       const productData = {
         color,
         size,
@@ -164,7 +170,12 @@ const ProductDetailComponent = () => {
   }
 
   const handleByNow = async () => {
-    if (selectedIndex != null && selectedSize != null) {
+    if (
+      selectedIndex != null &&
+      selectedSize != null &&
+      selectedIndex > -1 &&
+      selectedSize > -1
+    ) {
       const productData = {
         color,
         size,
@@ -177,14 +188,11 @@ const ProductDetailComponent = () => {
         const result = await addToCartAPI(productData)
         console.log(result)
         dispatch(setChange(!change))
-        showSuccessNotification()
         router.push('/order-now')
       } catch (error) {
         console.error('Error adding product:', error)
         toast.warning('sản phẩm trong kho đã đạt tối đa')
       }
-
-      // dispatch(addToCartRequest(productData))
     } else {
       setEr(true)
     }
@@ -244,8 +252,8 @@ const ProductDetailComponent = () => {
                     <div>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
-                        width='1.5em'
-                        height='1.5em'
+                        width='1.3em'
+                        height='1.3em'
                         viewBox='0 0 64 64'
                       >
                         <path
@@ -254,11 +262,11 @@ const ProductDetailComponent = () => {
                         />
                       </svg>
                     </div>
-                    <div className='mt-1'>
+                    <div>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
-                        width='1.5em'
-                        height='1.5em'
+                        width='1.4em'
+                        height='1.4em'
                         viewBox='0 0 64 64'
                       >
                         <path
@@ -267,20 +275,7 @@ const ProductDetailComponent = () => {
                         />
                       </svg>
                     </div>
-                    <div className='mt-2'>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='1.5em'
-                        height='1.5em'
-                        viewBox='0 0 64 64'
-                      >
-                        <path
-                          fill='#EE4D2D'
-                          d='M62 25.2H39.1L32 3l-7.1 22.2H2l18.5 13.7l-7 22.1L32 47.3L50.5 61l-7.1-22.2z'
-                        />
-                      </svg>
-                    </div>
-                    <div className='mt-1'>
+                    <div>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
                         width='1.5em'
@@ -296,8 +291,21 @@ const ProductDetailComponent = () => {
                     <div>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
-                        width='1.5em'
-                        height='1.5em'
+                        width='1.4em'
+                        height='1.4em'
+                        viewBox='0 0 64 64'
+                      >
+                        <path
+                          fill='#EE4D2D'
+                          d='M62 25.2H39.1L32 3l-7.1 22.2H2l18.5 13.7l-7 22.1L32 47.3L50.5 61l-7.1-22.2z'
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='1.3em'
+                        height='1.3em'
                         viewBox='0 0 64 64'
                       >
                         <path
@@ -382,17 +390,28 @@ const ProductDetailComponent = () => {
       `}
                         onClick={() => {
                           if (isSelectable && isColorAvailable) {
-                            if (
-                              thumbsSwiperRef.current &&
-                              thumbsSwiperRef.current.swiper
-                            ) {
-                              thumbsSwiperRef.current.swiper.slideToLoop(index)
-                            }
-                            dispatch(setSelectedIndex(index))
-                            dispatch(setCurrentIndex(index))
-                            dispatch(setColor(variant.images[0].id))
-                            if (selectedIndex != null && selectedSize != null) {
-                              setEr(false)
+                            if (selectedIndex === index) {
+                              dispatch(setSelectedIndex(-1))
+                              dispatch(setSize(''))
+                            } else {
+                              dispatch(setSize(''))
+                              if (
+                                thumbsSwiperRef.current &&
+                                thumbsSwiperRef.current.swiper
+                              ) {
+                                thumbsSwiperRef.current.swiper.slideToLoop(
+                                  index
+                                )
+                              }
+                              dispatch(setSelectedIndex(index))
+                              dispatch(setCurrentIndex(index))
+                              dispatch(setColor(variant.images[0].id))
+                              if (
+                                selectedIndex != null &&
+                                selectedSize != null
+                              ) {
+                                setEr(false)
+                              }
                             }
                           }
                         }}
@@ -483,15 +502,20 @@ const ProductDetailComponent = () => {
                                 : 'border-gray-400 text-gray-400 cursor-not-allowed'
                             }`}
                             onClick={() => {
-                              if (
-                                selectedIndex != null &&
-                                selectedSize != null
-                              ) {
-                                setEr(false)
-                              }
                               if (isSelectable) {
-                                dispatch(setSelectedSize(index))
-                                dispatch(setSize(sizeName))
+                                if (selectedSize === index) {
+                                  dispatch(setSelectedSize(-1))
+                                  dispatch(setColor(''))
+                                } else {
+                                  dispatch(setSelectedSize(index))
+                                  dispatch(setSize(sizeName))
+                                  if (
+                                    selectedIndex != null &&
+                                    selectedSize != null
+                                  ) {
+                                    setEr(false)
+                                  }
+                                }
                               }
                             }}
                             disabled={!isSelectable}
@@ -708,6 +732,8 @@ const ProductDetailComponent = () => {
           </div>
         </div>
       </div>
+
+      <RatingComponent />
     </>
   )
 }

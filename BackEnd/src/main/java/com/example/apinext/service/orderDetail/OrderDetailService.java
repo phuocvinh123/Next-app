@@ -15,6 +15,7 @@ import com.example.apinext.util.EmailUtils;
 import com.example.apinext.util.SentEmail;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,8 +25,10 @@ import java.util.Optional;
 @Transactional
 public class OrderDetailService implements IOrderDetailService{
     @Autowired
+    @Lazy
     private IOrderDetailRepository orderDetailRepository;
     @Autowired
+    @Lazy
     private OrderService orderService;
     @Autowired
     private CartService cartService;

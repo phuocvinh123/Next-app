@@ -92,6 +92,7 @@ export interface Order {
   totalProduct: number
   status: string
   subTotal: number
+  statusRating: boolean
 }
 
 export interface OrderDetail {

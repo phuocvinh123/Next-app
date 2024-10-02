@@ -51,23 +51,24 @@ public class CartService implements ICartService{
     public void createCart(CartDTO cartDTO) {
         Customer customer = customerService.findById(cartDTO.getCustomerId()).orElse(null);
         Product product = productService.findById(cartDTO.getProductId()).orElse(null);
-        Cart existingCart = cartRepository.findByCustomerAndProduct(customer, product);
-        if (existingCart != null) {
-            existingCart.setQuantity(existingCart.getQuantity() + 1);
-            cartRepository.save(existingCart);
-        } else {
-            Cart cart = new Cart();
-            cart.setCustomer(customer);
-            cart.setDate(DateUtils.convertStringToLocalDate(cartDTO.getDate()));
-            cart.setProduct(product);
-            cart.setQuantity(1);
-            cartRepository.save(cart);
-        }
+//        Cart existingCart = cartRepository.findByCustomerAndProduct(customer, product);
+//        if (existingCart != null) {
+//            existingCart.setQuantity(existingCart.getQuantity() + 1);
+//            cartRepository.save(existingCart);
+//        } else {
+//            Cart cart = new Cart();
+//            cart.setCustomer(customer);
+//            cart.setDate(DateUtils.convertStringToLocalDate(cartDTO.getDate()));
+//            cart.setProduct(product);
+//            cart.setQuantity(1);
+//            cartRepository.save(cart);
+//        }
     }
 
     @Override
     public Cart findByCustomerAndProduct(Customer customer, Product product) {
-        return cartRepository.findByCustomerAndProduct(customer, product);
+//        return cartRepository.findByCustomerAndProduct(customer, product);
+        return null;
     }
 
     @Override
@@ -85,7 +86,7 @@ public class CartService implements ICartService{
         Product product = productService.findById(addCart.getProductId()).get();
         Color color = colorService.findById(addCart.getColor()).get();
         Images images =imagesService.findById(addCart.getColor()).get();
-        Cart existingCart = cartRepository.findByCustomerAndProduct(customer, product);
+        Cart existingCart = cartRepository.findByCustomerAndProductAndColor(customer, product,color);
         if (existingCart != null) {
             if((existingCart.getQuantity() + addCart.getQuantity()) > existingCart.getImage().getStock().getQuantity()){
                return null;
