@@ -733,7 +733,7 @@ const ProductDetailComponent = () => {
         </div>
       </div>
 
-      <RatingComponent />
+      <RatingComponent productId={Number(productId)} />
     </>
   )
 }

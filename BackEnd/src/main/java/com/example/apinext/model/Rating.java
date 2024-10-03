@@ -33,4 +33,6 @@ public class Rating {
     private List<ImageRating> imageRating;
     @Enumerated(EnumType.STRING)
     private ERating eRating;
+    private int likes = 0;
+    private boolean liked = false;
 }

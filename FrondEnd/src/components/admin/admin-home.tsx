@@ -4,6 +4,7 @@ import AdminOrder from '@/components/admin/admin-order'
 import AdminProduct from '@/components/admin/admin-product'
 import AdminSendEmail from '@/components/admin/admin-send-email'
 import Dashboard from '@/components/admin/dashboard'
+import RatingAdmin from '@/components/admin/admin-rating'
 import { DeleteAllTokens } from '@/components/cookies/token'
 import {
   Avatar,
@@ -18,7 +19,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 const AdminHome = () => {
-  const [currentTab, setCurrentTab] = useState('Dashboard')
+  const [currentTab, setCurrentTab] = useState('Rating')
 
   const renderContent = () => {
     switch (currentTab) {
@@ -30,6 +31,8 @@ const AdminHome = () => {
         return <AdminOrder />
       case 'SendEmail':
         return <AdminSendEmail />
+      case 'Rating':
+        return <RatingAdmin />
       case 'User':
       default:
         return null
@@ -71,6 +74,12 @@ const AdminHome = () => {
             onClick={() => setCurrentTab('SendEmail')}
           >
             Send Email
+          </div>
+          <div
+            className='border-b-[0.5px] border-[#rgb(131_131_131)] pb-4 w-[260px] cursor-pointer hover:text-red-300'
+            onClick={() => setCurrentTab('Rating')}
+          >
+            Rating
           </div>
         </div>
       </div>

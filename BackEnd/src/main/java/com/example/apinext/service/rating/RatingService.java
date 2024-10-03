@@ -1,13 +1,12 @@
 package com.example.apinext.service.rating;
 
-import com.example.apinext.model.Customer;
-import com.example.apinext.model.DTO.RatingDto;
-import com.example.apinext.model.Order;
-import com.example.apinext.model.Product;
-import com.example.apinext.model.Rating;
+import com.example.apinext.model.*;
+
+import com.example.apinext.model.DTO.*;
 import com.example.apinext.model.enums.ERating;
 import com.example.apinext.repository.IRatingRepository;
 import com.example.apinext.service.customer.CustomerService;
+import com.example.apinext.service.imageRating.ImageRatingService;
 import com.example.apinext.service.order.OrderService;
 import com.example.apinext.service.product.ProductService;
 import jakarta.transaction.Transactional;
@@ -15,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,6 +29,8 @@ public class RatingService implements IRatingService{
     private CustomerService customerService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private ImageRatingService imageRatingService;
     @Override
     public List<Rating> findAll() {
         return ratingRepository.findAll();
@@ -62,10 +65,73 @@ public class RatingService implements IRatingService{
         Order order = orderService.findById(ratingDto.getOrderId()).get();
         order.setStatusRating(true);
         orderService.save(order);
-
+        ImageRating imageRating = new ImageRating();
+        imageRating.setUrlImage(ratingDto.getImageUrl());
+        imageRating.setRating(rating);
+        imageRatingService.save(imageRating);
     }
 
-    public List<Rating> findAllRatingByProductIdAndEStatusRating(Long productId,String status){
-        return ratingRepository.findAllByProduct_IdAndERating(productId, ERating.valueOf(status));
+    public List<RatingResDto> findAllRatingByProductIdAndEStatusRating(Long productId){
+        List<Rating> ratings = ratingRepository.findAllByProduct_Id(productId);
+        return ratings.stream()
+                .filter(rating -> rating.getERating() == ERating.APPROVED)
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private RatingResDto convertToDTO(Rating rating) {
+        RatingResDto dto = new RatingResDto();
+        dto.setId(rating.getId());
+        dto.setStar(rating.getStar());
+        dto.setComment(rating.getComment());
+        dto.setCreateAt(rating.getCreateAt());
+        dto.setRepComment(rating.getRepComment());
+        dto.setFullName(rating.getCustomer().getFullName());
+        dto.setLikes(rating.getLikes());
+        dto.setLiked(rating.isLiked());
+        dto.setImageRatings(rating.getImageRating());
+        return dto;
+    }
+
+    public LikeDto like(Long ratingId) {
+        Rating rating = ratingRepository.findById(String.valueOf(ratingId))
+                .orElseThrow(() -> new NoSuchElementException("Rating not found with id: " + ratingId));
+        rating.setLikes(rating.getLikes() + 1);
+        rating.setLiked(true);
+        ratingRepository.save(rating);
+        LikeDto likeDto = new LikeDto();
+        likeDto.setLikes(rating.getLikes());
+        likeDto.setLiked(rating.isLiked());
+        return likeDto;
+    }
+
+    public LikeDto unlike(Long ratingId) {
+        Rating rating = ratingRepository.findById(String.valueOf(ratingId))
+                .orElseThrow(() -> new NoSuchElementException("Rating not found with id: " + ratingId));
+        rating.setLikes(rating.getLikes() - 1);
+        rating.setLiked(false);
+        ratingRepository.save(rating);
+        LikeDto likeDto = new LikeDto();
+        likeDto.setLikes(rating.getLikes());
+        likeDto.setLiked(rating.isLiked());
+
+        return likeDto;
+    }
+
+    public Rating setRepComment(RepComment repComment) {
+        Rating rating = ratingRepository.findById(String.valueOf(repComment.getRatingId())).get();
+        rating.setRepComment((repComment.getRepComment()));
+        return ratingRepository.save(rating);
+    }
+
+    public void changeStatusRating (ChangeStatusRating changeStatusRating){
+        Rating rating = ratingRepository.findById(String.valueOf(changeStatusRating.getRatingId())).get();
+        rating.setERating(ERating.valueOf(changeStatusRating.getStatus()));
+        ratingRepository.save(rating);
+    }
+
+    public List<Rating> findAllByStatus (String status){
+       List<Rating> ratings= ratingRepository.findAll();
+       return ratings.stream().filter(r -> r.getERating() ==ERating.valueOf(status)).collect(Collectors.toList());
     }
 }

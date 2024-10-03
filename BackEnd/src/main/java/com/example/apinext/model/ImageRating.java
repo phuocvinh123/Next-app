@@ -17,7 +17,6 @@ public class ImageRating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String urlImage;
-    private String urlVideo;
     @ManyToOne
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private Rating rating;

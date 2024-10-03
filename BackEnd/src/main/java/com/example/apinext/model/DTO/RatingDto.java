@@ -18,4 +18,5 @@ public class RatingDto {
     private LocalDate date;
     private int Star;
     private String comment;
+    private String imageUrl;
 }

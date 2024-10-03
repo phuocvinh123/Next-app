@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Order, OrderDetail } from '@/components/interfaces/interface'
 import {
   fetchOrderFailure,
@@ -35,7 +35,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { getCookie } from 'cookies-next'
-
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
@@ -59,6 +58,54 @@ const HistoryOrder = () => {
   const [isClient, setIsClient] = useState(false)
   const [star, setStar] = useState(5)
   const [comment, setComment] = useState('')
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null)
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setSelectedImage(file)
+      uploadImage(file)
+    }
+  }
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  const uploadImage = async (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('upload_preset', 'next-app')
+    formData.append('cloud_name', 'dxwizprbn')
+    formData.append('folder', 'next-app')
+
+    try {
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dxwizprbn/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+
+      const data = await response.json()
+      if (response.ok) {
+        setImageUrl(data.secure_url)
+      } else {
+        console.error(data.error)
+      }
+    } catch (error) {
+      console.error('Có lỗi xảy ra:', error)
+    }
+  }
+
+  const handleDeleteImage = () => {
+    setSelectedImage(null)
+    setImageUrl('')
+  }
 
   const handleRatingChange = (event: any) => {
     setStar(Number(event.target.value))
@@ -105,6 +152,8 @@ const HistoryOrder = () => {
   }
 
   const handleOpenRating = (orderId: number) => {
+    setSelectedImage(null)
+    setImageUrl('')
     fetchOrderDetails(orderId)
     onOpenRating()
   }
@@ -144,6 +193,7 @@ const HistoryOrder = () => {
       date: new Date().toISOString(),
       star,
       comment,
+      imageUrl,
     }
     try {
       const response = await fetch('http://localhost:9002/api/ratings', {
@@ -384,12 +434,66 @@ const HistoryOrder = () => {
                     onChange={(e) => setComment(e.target.value)}
                   ></Textarea>
                 </div>
+                <div className=' mt-4'>
+                  <button
+                    className='flex gap-4 items-center justify-center border-[#ee4d2d] border-[1px] px-6 py-2 bg-[#fef6f5] w-56 relative'
+                    onClick={handleButtonClick}
+                  >
+                    <div>
+                      <svg
+                        width='20'
+                        height='18'
+                        viewBox='0 0 20 18'
+                        fill='none'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          clipRule='evenodd'
+                          d='M6.15377 9.76895C6.15377 11.8927 7.87492 13.6151 9.99992 13.6151C12.1236 13.6151 13.8461 11.8927 13.8461 9.76895C13.8461 7.6446 12.1236 5.9228 9.99992 5.9228C7.87492 5.9228 6.15377 7.6446 6.15377 9.76895ZM5 9.76896C5 7.00771 7.23813 4.76896 10 4.76896C12.7613 4.76896 15 7.00771 15 9.76896C15 12.5296 12.7613 14.769 10 14.769C7.23813 14.769 5 12.5296 5 9.76896ZM1.15385 17.2606C0.489784 17.2606 0 16.7249 0 16.0662V4.12218C0 3.46224 0.489784 2.8459 1.15385 2.8459H4.61538L5.21635 1.73267C5.21635 1.73267 5.75421 0.538208 6.41827 0.538208H13.5817C14.2452 0.538208 14.7837 1.73267 14.7837 1.73267L15.3846 2.8459H18.8462C19.5096 2.8459 20 3.46224 20 4.12218V16.0662C20 16.7249 19.5096 17.2606 18.8462 17.2606H1.15385Z'
+                          fill='#EE4D2D'
+                        ></path>
+                      </svg>
+                    </div>
+                    <div className='text-[#ee4d2d] font-medium'>
+                      Thêm Hình ảnh
+                    </div>
+                  </button>
+                  <input
+                    type='file'
+                    accept='image/*'
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                    ref={fileInputRef}
+                  />
+                  {selectedImage && (
+                    <div className='flex items-center mt-2'>
+                      <Image
+                        src={imageUrl}
+                        alt='Uploaded'
+                        width={20}
+                        height={20}
+                        className='ml-4 w-12 h-12 object-cover'
+                      />
+                      <button
+                        onClick={handleDeleteImage}
+                        className='ml-2 text-red-500'
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           <ModalFooter>
-            <Button onClick={onCloseRating} className='mr-5'>
+            <Button
+              onClick={() => {
+                onCloseRating(), setSelectedImage(null), setImageUrl('')
+              }}
+              className='mr-5'
+            >
               Trở lại
             </Button>
             <Button

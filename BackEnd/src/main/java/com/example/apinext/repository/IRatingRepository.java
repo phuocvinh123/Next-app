@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface IRatingRepository extends JpaRepository<Rating ,String> {
-    List<Rating> findAllByProduct_IdAndERating(Long product_id, ERating ERating);
-
+    List<Rating> findAllByProduct_Id(Long product_id);
 }

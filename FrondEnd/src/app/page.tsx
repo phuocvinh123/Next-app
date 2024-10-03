@@ -4,6 +4,7 @@ import { HeroSection } from '@/components/home/hero-section'
 import { PeopleSection } from '@/components/home/people-section'
 import { Section } from '@/components/home/section'
 import { TestimonialSection } from '@/components/home/testimonials-section'
+import React from 'react'
 
 export default function Home() {
   return (

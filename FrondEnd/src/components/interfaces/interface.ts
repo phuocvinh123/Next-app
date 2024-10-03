@@ -139,6 +139,42 @@ export interface CustomJwtPayload extends JwtPayload {
   role: string
 }
 
+export interface Rating {
+  id: number
+  star: number
+  comment: string
+  createAt: string
+  repComment: string
+  fullName: string
+  eRating: string
+  likes: number
+  liked: boolean
+  imageRatings: ImageRatings[]
+}
+
+export interface RatingDTO {
+  id: number
+  star: number
+  comment: string
+  createAt: string
+  repComment: string
+  likes: number
+  liked: boolean
+  erating: string
+  customer: Customer
+  product: Product
+}
+
+export interface NewLike {
+  likes: number
+  liked: boolean
+}
+
+export interface ImageRatings {
+  id: number
+  urlImage: string
+}
+
 export interface ProductSwiperProps {
   variantDto: VariantData[]
   currentIndex: number | null
