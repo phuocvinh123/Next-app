@@ -8,11 +8,13 @@ import com.example.apinext.repository.IRatingRepository;
 import com.example.apinext.service.customer.CustomerService;
 import com.example.apinext.service.imageRating.ImageRatingService;
 import com.example.apinext.service.order.OrderService;
+import com.example.apinext.service.orderDetail.OrderDetailService;
 import com.example.apinext.service.product.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,6 +33,8 @@ public class RatingService implements IRatingService{
     private OrderService orderService;
     @Autowired
     private ImageRatingService imageRatingService;
+    @Autowired
+    private OrderDetailService orderDetailService;
     @Override
     public List<Rating> findAll() {
         return ratingRepository.findAll();
@@ -61,10 +65,11 @@ public class RatingService implements IRatingService{
         rating.setComment(ratingDto.getComment());
         rating.setStar(ratingDto.getStar());
         rating.setERating(ERating.PENDING);
-        ratingRepository.save(rating);
         Order order = orderService.findById(ratingDto.getOrderId()).get();
         order.setStatusRating(true);
         orderService.save(order);
+        rating.setOrder(order);
+        ratingRepository.save(rating);
         ImageRating imageRating = new ImageRating();
         imageRating.setUrlImage(ratingDto.getImageUrl());
         imageRating.setRating(rating);
@@ -133,5 +138,16 @@ public class RatingService implements IRatingService{
     public List<Rating> findAllByStatus (String status){
        List<Rating> ratings= ratingRepository.findAll();
        return ratings.stream().filter(r -> r.getERating() ==ERating.valueOf(status)).collect(Collectors.toList());
+    }
+
+    public Optional<ShowRatingDto> findByOrderId(Long orderId){
+        Order od = orderService.findById(orderId).get();
+        List<OrderDetail> dt =orderDetailService.getOrderDetailByOrder_Id(od.getId());
+        Rating rating = ratingRepository.findByOrder_Id(od.getId()).get();
+        ShowRatingDto dto = new ShowRatingDto();
+        dto.setOrderDetails(dt);
+        dto.setOrder(od);
+        dto.setRating(rating);
+        return Optional.of(dto);
     }
 }

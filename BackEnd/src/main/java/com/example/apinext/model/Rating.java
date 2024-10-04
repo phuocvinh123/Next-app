@@ -28,6 +28,8 @@ public class Rating {
     private Customer customer;
     @ManyToOne
     private Product product;
+    @ManyToOne
+    private Order order;
     @OneToMany(mappedBy = "rating")
     @JsonIgnore
     private List<ImageRating> imageRating;

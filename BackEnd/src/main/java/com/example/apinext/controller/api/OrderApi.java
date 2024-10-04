@@ -60,7 +60,7 @@ public class OrderApi {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<?> getAllOrderByCustomerId(@PathVariable Long customerId){
-        List<Order>orderList = orderService.findAllByCustomer_Id(customerId);
+        List<OrderResDTO>orderList = orderService.getAllOrderResDTOs(customerId);
         return new ResponseEntity<>(orderList,HttpStatus.OK);
     }
 

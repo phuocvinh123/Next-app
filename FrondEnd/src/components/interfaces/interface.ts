@@ -5,7 +5,6 @@ export interface User {
   username: string
   password: string
 }
-
 export interface Discount {
   id: number
   percentDecrease: string
@@ -15,14 +14,6 @@ export interface Discount {
   sold: string
   images: string
 }
-// export interface Images {
-//   id: number
-//   url: string
-//   product: Product
-//   color: Color
-//   size: Size[]
-// }
-
 export interface Size {
   id: number
   sizeName: string
@@ -104,6 +95,17 @@ export interface OrderDetail {
   color: Color
   size: string
   image: Image
+}
+
+export interface OrderResDTO {
+  order: Order
+  orderDetails: OrderDetail[]
+}
+
+export interface ShowRating {
+  order: Order
+  orderDetails: OrderDetail[]
+  rating: RatingDTO
 }
 
 export interface Customer {

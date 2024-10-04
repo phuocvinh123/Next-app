@@ -15,6 +15,7 @@ import {
   Textarea,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
@@ -133,11 +134,13 @@ const RatingAdmin = () => {
               <Tr>
                 <Th textAlign='center'>#</Th>
                 <Th textAlign='center'>Full Name</Th>
-                <Th textAlign='center' w={150}>
+                <Th textAlign='center' maxW={150} isTruncated>
                   Product
                 </Th>
                 <Th textAlign='center'>Date</Th>
-                <Th textAlign='center'>Comment</Th>
+                <Th textAlign='center' maxW={250}>
+                  Comment
+                </Th>
                 <Th textAlign='center'>Star</Th>
                 <Th textAlign='center'>Status</Th>
                 <Th textAlign='center'>Action</Th>
@@ -148,11 +151,26 @@ const RatingAdmin = () => {
                 <Tr key={r.id}>
                   <Td textAlign='center'>{r.id}</Td>
                   <Td textAlign='center'>{r.customer.fullName}</Td>
-                  <Td textAlign='center' isTruncated w={150}>
-                    {r.product.title}
+                  <Td
+                    textAlign='center'
+                    isTruncated
+                    maxW={250}
+                    className='cursor-pointer'
+                  >
+                    <Tooltip label={r.product.title}>
+                      <span>{r.product.title}</span>
+                    </Tooltip>
                   </Td>
                   <Td textAlign='center'>{r.createAt}</Td>
-                  <Td textAlign='center'>{r.comment}</Td>
+                  <Td
+                    textAlign='center'
+                    className='text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer'
+                    maxW={250}
+                  >
+                    <Tooltip label={r.comment}>
+                      <span>{r.comment}</span>
+                    </Tooltip>
+                  </Td>
                   <Td textAlign='center'>
                     <div className='flex'>
                       {Array.from({ length: 5 }, (_, index) => (
@@ -181,21 +199,12 @@ const RatingAdmin = () => {
                       }
                       bg={
                         r.erating === 'APPROVED'
-                          ? 'green.200'
+                          ? 'green.400'
                           : r.erating === 'PENDING'
-                          ? 'yellow.200'
+                          ? 'yellow.400'
                           : r.erating === 'CANCEL'
-                          ? 'red.200'
-                          : 'gray.200'
-                      }
-                      borderColor={
-                        r.erating === 'APPROVED'
-                          ? 'green.500'
-                          : r.erating === 'PENDING'
-                          ? 'yellow.500'
-                          : r.erating === 'CANCEL'
-                          ? 'red.500'
-                          : 'gray.500'
+                          ? 'red.400'
+                          : 'gray.400'
                       }
                     >
                       <option

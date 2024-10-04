@@ -74,6 +74,11 @@ public class RatingApi {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  @GetMapping("/showRating/{orderId}")
+  public ResponseEntity<?> findByOrderId (@PathVariable Long orderId){
+    ShowRatingDto dto =ratingService.findByOrderId(orderId).get();
+    return new ResponseEntity<>(dto,HttpStatus.OK);
+  }
 
 
 }

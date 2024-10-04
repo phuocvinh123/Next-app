@@ -19,7 +19,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 const AdminHome = () => {
-  const [currentTab, setCurrentTab] = useState('Rating')
+  const [currentTab, setCurrentTab] = useState('Dashboard')
 
   const renderContent = () => {
     switch (currentTab) {

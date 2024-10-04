@@ -336,11 +336,14 @@ const ProductDetailComponent = () => {
                   <span className='text-xl'>250.000</span>
                 </div>
                 <div className='flex text-[#EE4D2D] font-medium'>
-                  {selectedIndex != null && selectedSize != null ? (
+                  {selectedIndex != null &&
+                  selectedSize != null &&
+                  selectedIndex > -1 &&
+                  selectedSize > -1 ? (
                     <>
                       <span className='text-xl'>₫</span>
                       <span className='text-3xl'>
-                        {variantDto[selectedIndex].images[0].price.toFixed(3)}
+                        {variantDto[selectedIndex]?.images[0].price.toFixed(3)}
                       </span>
                     </>
                   ) : (
